@@ -12,7 +12,7 @@ type Resource struct {
 	Model            interface{}
 }
 
-func (r *Resource) ListResources(c *gin.Context) {
+func (r *Resource) ListResource(c *gin.Context) {
 	objects, err := Conn.ListAllPropertiesByTableName(r.TableName)
 	if err != nil {
 		HandleInternalServerError(c, err)

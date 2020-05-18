@@ -16,8 +16,8 @@ func init() {
 	InitConnector("sqlite", "test/test_data/base.sqlite")
 }
 
-func TestResource_ListResources(t *testing.T) {
+func TestResource_ListResource(t *testing.T) {
 	router := gin.Default()
-	router.GET(challenge.BaseRelativePath, challenge.ListResources)
-	challenge.TestResourceListResources(t, router)
+	router.GET(challenge.BaseRelativePath, challenge.ListResource)
+	challenge.TestResourceListResource(t, router)
 }
