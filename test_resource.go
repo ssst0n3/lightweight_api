@@ -17,7 +17,7 @@ func ObjectOperate(req *http.Request, router *gin.Engine) *httptest.ResponseReco
 	return w
 }
 
-func (r *Resource) TestApiV1ListResources(t *testing.T, router *gin.Engine) {
+func (r *Resource) TestResourceListResources(t *testing.T, router *gin.Engine) {
 	req, _ := http.NewRequest(http.MethodGet, r.BaseRelativePath, nil)
 	w := ObjectOperate(req, router)
 	assert.Equal(t, http.StatusOK, w.Code)
