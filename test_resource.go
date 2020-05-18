@@ -3,7 +3,6 @@ package lightweight_api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,7 +12,7 @@ func ObjectOperate(req *http.Request, router *gin.Engine) *httptest.ResponseReco
 	gin.SetMode(gin.ReleaseMode)
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
-	log.Printf("body: %+v", w.Body.String())
+	Logger.Infof("body: %+v", w.Body.String())
 	return w
 }
 

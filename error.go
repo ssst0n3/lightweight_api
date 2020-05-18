@@ -3,13 +3,12 @@ package lightweight_api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"net/http"
 )
 
 func CheckError(err error) {
 	if err != nil {
-		logrus.Errorf("error: %+v\n", errors.Errorf(err.Error()))
+		Logger.Errorf("error: %+v\n", errors.Errorf(err.Error()))
 	}
 }
 

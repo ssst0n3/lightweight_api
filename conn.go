@@ -6,9 +6,9 @@ import (
 
 var Conn lightweight_db.Connector
 
-func InitExample(dsn string) {
+func InitConnector(driverName string, dsn string) {
 	Conn = lightweight_db.Connector{
-		DriverName: "mysql",
+		DriverName: driverName,
 		Dsn:        dsn,
 	}
 	Conn.Init()
