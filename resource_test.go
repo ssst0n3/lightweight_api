@@ -1,7 +1,10 @@
 package lightweight_api
 
-import "testing"
+import (
+	"github.com/sirupsen/logrus"
+	"testing"
+)
 
-func TestResource_ListResources(t *testing.T) {
-
+func (r *Resource) TestResource_ListResources(t *testing.T) {
+	logrus.Warn("test")
 }
