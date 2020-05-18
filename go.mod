@@ -1,4 +1,4 @@
-module github.com/ssst0n3/lighweight_api
+module github.com/ssst0n3/lightweight_api
 
 go 1.14
 
