@@ -6,13 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/lightweight_db"
 	"net/http"
+	"strconv"
 )
 
 type Resource struct {
 	Name             string
 	TableName        string
 	BaseRelativePath string
-	Model            interface{}	// model cannot be reused
+	Model            interface{} // model cannot be reused
 }
 
 func (r *Resource) ListResource(c *gin.Context) {
@@ -22,6 +23,25 @@ func (r *Resource) ListResource(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, objects)
+}
+
+func (r *Resource) CheckResourceExistsById(c *gin.Context) (uint, error) {
+	paramId := c.Param("id")
+	idInt64, err := strconv.ParseInt(paramId, 10, 16)
+	id := uint(idInt64)
+	if err != nil {
+		HandleStatusBadRequestError(c, err)
+		return id, err
+	}
+
+	if !Conn.IsResourceExistsById(r.TableName, idInt64) {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"reason":  fmt.Sprintf("%sId not exists.", r.Name),
+		})
+		return id, err
+	}
+	return id, error(nil)
 }
 
 func (r *Resource) CheckResourceExistsByGuid(c *gin.Context, guidColName string, guidValue interface{}) (bool, error) {
@@ -37,7 +57,6 @@ func (r *Resource) CheckResourceExistsByGuid(c *gin.Context, guidColName string,
 	}
 	return false, nil
 }
-
 
 func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFiledJsonTag string) {
 	if !lightweight_db.IsPointer(modelPtr) {
@@ -77,4 +96,21 @@ func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFile
 	c.JSON(http.StatusOK, gin.H{
 		"success": true, "id": id,
 	})
+}
+
+func (r *Resource) DeleteResource(c *gin.Context) {
+	id, err := r.CheckResourceExistsById(c)
+	if err != nil {
+		return
+	}
+
+	if err := Conn.DeleteObjectById(r.TableName, int64(id)); err != nil {
+		HandleInternalServerError(c, err)
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+		})
+		return
+	}
 }
