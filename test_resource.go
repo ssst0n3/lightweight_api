@@ -2,7 +2,6 @@ package lightweight_api
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -11,15 +10,8 @@ import (
 	"testing"
 )
 
-func DeleteAllObjects(tableName string)  {
-	_, err := Conn.Exec(fmt.Sprintf("DELETE FROM %s", tableName))
-	if err != nil {
-		Logger.Fatal(err)
-	}
-}
-
 func (r *Resource) DeleteAllObjects() {
-	DeleteAllObjects(r.TableName)
+	Conn.DeleteAllObjects(r.TableName)
 }
 
 func ObjectOperate(req *http.Request, router *gin.Engine) *httptest.ResponseRecorder {
