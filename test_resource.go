@@ -11,11 +11,15 @@ import (
 	"testing"
 )
 
-func (r *Resource) DeleteAllObjects() {
-	_, err := Conn.Exec(fmt.Sprintf("DELETE FROM %s", r.TableName))
+func DeleteAllObjects(tableName string)  {
+	_, err := Conn.Exec(fmt.Sprintf("DELETE FROM %s", tableName))
 	if err != nil {
 		Logger.Fatal(err)
 	}
+}
+
+func (r *Resource) DeleteAllObjects() {
+	DeleteAllObjects(r.TableName)
 }
 
 func ObjectOperate(req *http.Request, router *gin.Engine) *httptest.ResponseRecorder {
@@ -38,7 +42,7 @@ func (r *Resource) TestResourceListResource(t *testing.T, router *gin.Engine) {
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
-func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, obj interface{}, guidColName, guidValue string) {
+func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, obj interface{}, guidColName string, guidValue interface{}) {
 	objJson, err := json.Marshal(obj)
 	assert.Equal(t, nil, err)
 	reader := strings.NewReader(string(objJson))
