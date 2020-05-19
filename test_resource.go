@@ -51,6 +51,34 @@ func (r *Resource) TestResourceCheckResourceExistsById(t *testing.T, router *gin
 	})
 }
 
+func (r *Resource) TestResourceCheckResourceExistsByGuid(t *testing.T, resource interface{}, guidColName string, guidValue interface{}) {
+	t.Run("not exists", func(t *testing.T) {
+		r.DeleteAllObjects()
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		exists, err := r.CheckResourceExistsByGuid(c, guidColName, guidValue)
+		assert.NoError(t, err)
+		assert.Equal(t, false, exists)
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+	t.Run("exists", func(t *testing.T) {
+		r.DeleteAllObjects()
+		_, err := Conn.CreateObject(r.TableName, resource)
+		w := httptest.NewRecorder()
+		c, _ := gin.CreateTestContext(w)
+		exists, err := r.CheckResourceExistsByGuid(c, guidColName, guidValue)
+		assert.NoError(t, err)
+		assert.Equal(t, true, exists)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		expect, err := json.Marshal(gin.H{
+			"success": false,
+			"reason":  fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue),
+		})
+		assert.NoError(t, err)
+		assert.Equal(t, string(expect), w.Body.String())
+	})
+}
+
 func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, obj interface{}, guidColName string, guidValue interface{}) {
 	objJson, err := json.Marshal(obj)
 	assert.Equal(t, nil, err)
@@ -61,4 +89,8 @@ func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, 
 	exists, err := Conn.IsResourceExistsByGuid(r.TableName, guidColName, guidValue)
 	assert.NoError(t, err)
 	assert.Equal(t, true, exists)
+}
+
+func (r *Resource) TestResourceDeleteResource(t *testing.T, router *gin.Engine) {
+
 }

@@ -25,11 +25,20 @@ func TestResource_ListResource(t *testing.T) {
 
 func TestResource_CheckResourceExistsById(t *testing.T) {
 	router := gin.Default()
-	router.GET(challenge.BaseRelativePath + "/:id", func(context *gin.Context) {
+	router.GET(challenge.BaseRelativePath+"/:id", func(context *gin.Context) {
 		//noinspection GoUnhandledErrorResult
 		challenge.CheckResourceExistsById(context)
 	})
 	challenge.TestResourceCheckResourceExistsById(t, router, test_data.Challenge1.Challenge)
+}
+
+func TestResource_CheckResourceExistsByGuid(t *testing.T) {
+	challenge.TestResourceCheckResourceExistsByGuid(
+		t,
+		test_data.Challenge1.Challenge,
+		test_data.ColumnNameChallengeName,
+		test_data.Challenge1.Name,
+	)
 }
 
 func TestResource_CreateResource(t *testing.T) {
@@ -43,4 +52,10 @@ func TestResource_CreateResource(t *testing.T) {
 		test_data.ColumnNameChallengeName,
 		test_data.Challenge1.Name,
 	)
+}
+
+func TestResource_DeleteResource(t *testing.T) {
+	router := gin.Default()
+	router.DELETE(challenge.BaseRelativePath, challenge.DeleteResource)
+
 }

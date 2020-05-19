@@ -51,7 +51,7 @@ func (r *Resource) CheckResourceExistsByGuid(c *gin.Context, guidColName string,
 	} else if exists {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
-			"reason":  fmt.Sprintf("%s name already exists.", r.Name),
+			"reason":  fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue),
 		})
 		return true, nil
 	}
