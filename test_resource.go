@@ -45,7 +45,9 @@ func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, 
 	req, _ := http.NewRequest(http.MethodPost, r.BaseRelativePath, reader)
 	w := r.DeleteAllThenObjectOperate(t, req, router)
 	assert.Equal(t, http.StatusOK, w.Code)
-	exists, err := Conn.IsResourceNameExists(r.TableName, guidColName, guidValue)
+	exists, err := Conn.IsResourceExistsByGuid(r.TableName, guidColName, guidValue)
 	assert.NoError(t, err)
 	assert.Equal(t, true, exists)
 }
+
+
