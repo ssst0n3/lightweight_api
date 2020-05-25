@@ -129,7 +129,7 @@ func (r *Resource) MustResourceNotExistsExceptSelfByModelPtr(c *gin.Context, mod
 	return nil
 }
 
-func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) {
+func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, taskBeforeCreateObject func(modelPtr interface{})) {
 	if !lightweight_db.IsPointer(modelPtr) {
 		HandleInternalServerError(c, errors.New("modelPtr is not type of pointer"))
 		return
@@ -147,6 +147,10 @@ func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 	if err != nil {
 		HandleInternalServerError(c, err)
 		return
+	}
+
+	if taskBeforeCreateObject != nil {
+		taskBeforeCreateObject(modelPtr)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
