@@ -14,16 +14,20 @@ func CheckError(err error) {
 
 func HandleInternalServerError(c *gin.Context, err error) {
 	CheckError(err)
-	c.JSON(http.StatusInternalServerError, gin.H{
-		"success": false,
-		"reason":  err.Error(),
-	})
+	if !c.Writer.Written() {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"success": false,
+			"reason":  err.Error(),
+		})
+	}
 }
 
 func HandleStatusBadRequestError(c *gin.Context, err error) {
 	CheckError(err)
-	c.JSON(http.StatusBadRequest, gin.H{
-		"success": false,
-		"reason":  err.Error(),
-	})
+	if !c.Writer.Written(){
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"reason":  err.Error(),
+		})
+	}
 }

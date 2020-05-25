@@ -56,6 +56,21 @@ func TestResource_CreateResource(t *testing.T) {
 
 func TestResource_DeleteResource(t *testing.T) {
 	router := gin.Default()
-	router.DELETE(challenge.BaseRelativePath, challenge.DeleteResource)
+	router.DELETE(challenge.BaseRelativePath+"/:id", challenge.DeleteResource)
+	challenge.TestResourceDeleteResource(t, router, test_data.Challenge{})
+}
 
+func TestResource_UpdateResource(t *testing.T) {
+	router := gin.Default()
+	router.PUT(challenge.BaseRelativePath+"/:id", func(context *gin.Context) {
+		challenge.UpdateResource(context, &test_data.Challenge{}, test_data.ColumnNameChallengeName)
+	})
+	Conn.DeleteAllObjects(test_data.TableNameChallenge)
+	Conn.ResetAutoIncrementSqlite(test_data.TableNameChallenge)
+	challenge.TestResourceUpdateResource(
+		t, router,
+		test_data.Challenge1.Challenge,
+		test_data.Challenge1Update.Challenge,
+		&test_data.ChallengeWithId{},
+	)
 }

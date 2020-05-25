@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -82,15 +83,48 @@ func (r *Resource) TestResourceCheckResourceExistsByGuid(t *testing.T, resource 
 func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, obj interface{}, guidColName string, guidValue interface{}) {
 	objJson, err := json.Marshal(obj)
 	assert.Equal(t, nil, err)
-	reader := strings.NewReader(string(objJson))
-	req, _ := http.NewRequest(http.MethodPost, r.BaseRelativePath, reader)
-	w := r.DeleteAllThenObjectOperate(req, router)
-	assert.Equal(t, http.StatusOK, w.Code)
-	exists, err := Conn.IsResourceExistsByGuid(r.TableName, guidColName, guidValue)
-	assert.NoError(t, err)
-	assert.Equal(t, true, exists)
+	t.Run("not exists", func(t *testing.T) {
+		reader := strings.NewReader(string(objJson))
+		req, _ := http.NewRequest(http.MethodPost, r.BaseRelativePath, reader)
+		w := r.DeleteAllThenObjectOperate(req, router)
+		assert.Equal(t, http.StatusOK, w.Code)
+		exists, err := Conn.IsResourceExistsByGuid(r.TableName, guidColName, guidValue)
+		assert.NoError(t, err)
+		assert.Equal(t, true, exists)
+	})
+	t.Run("exists", func(t *testing.T) {
+		reader := strings.NewReader(string(objJson))
+		req, _ := http.NewRequest(http.MethodPost, r.BaseRelativePath, reader)
+		w := ObjectOperate(req, router)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Contains(t, `{"reason":"challenge already exists. guidColName: name, guidValue: name","success":false}`, w.Body.String())
+	})
 }
 
-func (r *Resource) TestResourceDeleteResource(t *testing.T, router *gin.Engine) {
+func (r *Resource) TestResourceDeleteResource(t *testing.T, router *gin.Engine, obj interface{}) {
+	r.DeleteAllObjects()
+	id, err := Conn.CreateObject(r.TableName, obj)
+	assert.NoError(t, err)
+	req, _ := http.NewRequest(http.MethodDelete, r.BaseRelativePath+"/"+strconv.FormatInt(id, 10), nil)
+	w := ObjectOperate(req, router)
+	assert.Equal(t, http.StatusOK, w.Code)
+	exists := Conn.IsResourceExistsById(r.TableName, id)
+	assert.Equal(t, false, exists)
+}
 
+func (r *Resource) TestResourceUpdateResource(t *testing.T, router *gin.Engine, obj interface{}, objUpdate interface{}, modelPtr interface{}) {
+	id, err := Conn.CreateObject(r.TableName, obj)
+	assert.NoError(t, err)
+	objJson, err := json.Marshal(objUpdate)
+	reader := strings.NewReader(string(objJson))
+	req, _ := http.NewRequest(http.MethodPut, r.BaseRelativePath+"/"+strconv.FormatInt(id, 10), reader)
+	w := ObjectOperate(req, router)
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	assert.NoError(t, Conn.OrmShowObjectByIdUsingReflect(r.TableName, id, modelPtr))
+	got, err := json.Marshal(modelPtr)
+	assert.NoError(t, err)
+	expect, err := json.Marshal(objUpdate)
+	assert.NoError(t, err)
+	assert.Contains(t, string(got), string(expect)[1:])
 }

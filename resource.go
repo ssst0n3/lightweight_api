@@ -25,16 +25,15 @@ func (r *Resource) ListResource(c *gin.Context) {
 	c.JSON(http.StatusOK, objects)
 }
 
-func (r *Resource) CheckResourceExistsById(c *gin.Context) (uint, error) {
+func (r *Resource) CheckResourceExistsById(c *gin.Context) (int64, error) {
 	paramId := c.Param("id")
-	idInt64, err := strconv.ParseInt(paramId, 10, 16)
-	id := uint(idInt64)
+	id, err := strconv.ParseInt(paramId, 10, 16)
 	if err != nil {
 		HandleStatusBadRequestError(c, err)
 		return id, err
 	}
 
-	if !Conn.IsResourceExistsById(r.TableName, idInt64) {
+	if !Conn.IsResourceExistsById(r.TableName, id) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
 			"reason":  fmt.Sprintf("%sId not exists.", r.Name),
@@ -58,7 +57,79 @@ func (r *Resource) CheckResourceExistsByGuid(c *gin.Context, guidColName string,
 	return false, nil
 }
 
-func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFiledJsonTag string) {
+func (r *Resource) CheckResourceExistsByGuidExceptSelf(c *gin.Context, guidColName string, guidValue interface{}, id int64) (bool, error) {
+	if exists, err := Conn.IsResourceExistsExceptSelfByGuid(r.TableName, guidColName, guidValue, id); err != nil {
+		HandleInternalServerError(c, err)
+		return false, err
+	} else if exists {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"success": false,
+			"reason":  fmt.Sprintf("%s name already exists.", r.Name),
+		})
+		return true, nil
+	}
+	return false, nil
+}
+
+func (r *Resource) MustResourceNotExistsByModelPtr(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) error {
+	if !lightweight_db.IsPointer(modelPtr) {
+		err := errors.New("modelPtr is not type of pointer")
+		CheckError(err)
+		return err
+	}
+	if GuidFieldJsonTag != "" {
+		guidFiled, find := lightweight_db.FieldByJsonTag(lightweight_db.Reflect(modelPtr), GuidFieldJsonTag)
+		if !find {
+			err := errors.New("cannot find field: " + GuidFieldJsonTag)
+			CheckError(err)
+			return err
+		}
+		guidValue := guidFiled.Interface()
+		exist, err := r.CheckResourceExistsByGuid(c, GuidFieldJsonTag, guidValue)
+		if err != nil {
+			CheckError(err)
+			return err
+		}
+		if exist {
+			err := errors.New(fmt.Sprintf("guidField: %s already exists", GuidFieldJsonTag))
+			CheckError(err)
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (r *Resource) MustResourceNotExistsExceptSelfByModelPtr(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, id int64) error {
+	if !lightweight_db.IsPointer(modelPtr) {
+		err := errors.New("modelPtr is not type of pointer")
+		CheckError(err)
+		return err
+	}
+	if GuidFieldJsonTag != "" {
+		guidFiled, find := lightweight_db.FieldByJsonTag(lightweight_db.Reflect(modelPtr), GuidFieldJsonTag)
+		if !find {
+			err := errors.New("cannot find field: " + GuidFieldJsonTag)
+			CheckError(err)
+			return err
+		}
+		guidValue := guidFiled.Interface()
+		exist, err := r.CheckResourceExistsByGuidExceptSelf(c, GuidFieldJsonTag, guidValue, id)
+		if err != nil {
+			CheckError(err)
+			return err
+		}
+		if exist {
+			err := errors.New(fmt.Sprintf("guidField: %s already exists", GuidFieldJsonTag))
+			CheckError(err)
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) {
 	if !lightweight_db.IsPointer(modelPtr) {
 		HandleInternalServerError(c, errors.New("modelPtr is not type of pointer"))
 		return
@@ -68,25 +139,10 @@ func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFile
 		return
 	}
 
-	if GuidFiledJsonTag != "" {
-		guidFiled, find := lightweight_db.FieldByJsonTag(lightweight_db.Reflect(modelPtr), GuidFiledJsonTag)
-		if !find {
-			HandleInternalServerError(c, errors.New("cannot find field: "+GuidFiledJsonTag))
-			return
-		}
-		guidValue := guidFiled.Interface()
-		//guidValue := reflect.ValueOf(modelPtr).Elem().FieldByName("Name").String()
-		exist, err := r.CheckResourceExistsByGuid(c, GuidFiledJsonTag, guidValue)
-		if err != nil {
-			HandleInternalServerError(c, err)
-			return
-		}
-		if exist {
-			HandleStatusBadRequestError(c, errors.New(fmt.Sprintf("guidField: %s already exists", GuidFiledJsonTag)))
-			return
-		}
+	if err := r.MustResourceNotExistsByModelPtr(c, modelPtr, GuidFieldJsonTag); err != nil {
+		HandleInternalServerError(c, err)
+		return
 	}
-
 	id, err := Conn.CreateObject(r.TableName, modelPtr)
 	if err != nil {
 		HandleInternalServerError(c, err)
@@ -104,7 +160,33 @@ func (r *Resource) DeleteResource(c *gin.Context) {
 		return
 	}
 
-	if err := Conn.DeleteObjectById(r.TableName, int64(id)); err != nil {
+	if err := Conn.DeleteObjectById(r.TableName, id); err != nil {
+		HandleInternalServerError(c, err)
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+		})
+		return
+	}
+}
+
+func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) {
+	id, err := r.CheckResourceExistsById(c)
+	if err != nil {
+		return
+	}
+
+	if err := c.ShouldBindJSON(modelPtr); err != nil {
+		HandleStatusBadRequestError(c, err)
+		return
+	}
+
+	if err := r.MustResourceNotExistsExceptSelfByModelPtr(c, modelPtr, GuidFieldJsonTag, id); err != nil {
+		HandleInternalServerError(c, err)
+		return
+	}
+	if err := Conn.UpdateObject(id, r.TableName, modelPtr); err != nil {
 		HandleInternalServerError(c, err)
 		return
 	} else {
