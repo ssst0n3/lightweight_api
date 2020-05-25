@@ -44,7 +44,7 @@ func TestResource_CheckResourceExistsByGuid(t *testing.T) {
 func TestResource_CreateResource(t *testing.T) {
 	router := gin.Default()
 	router.POST(challenge.BaseRelativePath, func(context *gin.Context) {
-		challenge.CreateResource(context, &test_data.Challenge{}, test_data.ColumnNameChallengeName)
+		challenge.CreateResource(context, &test_data.Challenge{}, test_data.ColumnNameChallengeName, nil)
 	})
 	challenge.TestResourceCreateResource(
 		t, router,
@@ -60,6 +60,7 @@ func TestResource_DeleteResource(t *testing.T) {
 	challenge.TestResourceDeleteResource(t, router, test_data.Challenge{})
 }
 
+// Please Delete and Reset Table by your self
 func TestResource_UpdateResource(t *testing.T) {
 	router := gin.Default()
 	router.PUT(challenge.BaseRelativePath+"/:id", func(context *gin.Context) {
