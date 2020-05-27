@@ -38,6 +38,7 @@ func (r *Resource) TestResourceListResource(t *testing.T, router *gin.Engine) {
 
 func (r *Resource) TestResourceCheckResourceExistsById(t *testing.T, router *gin.Engine, resource interface{}) {
 	t.Run("not exists", func(t *testing.T) {
+		r.DeleteAllObjects()
 		req, _ := http.NewRequest(http.MethodGet, r.BaseRelativePath+"/1", nil)
 		w := ObjectOperate(req, router)
 		assert.Equal(t, http.StatusBadRequest, w.Code)
