@@ -98,7 +98,12 @@ func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, 
 		req, _ := http.NewRequest(http.MethodPost, r.BaseRelativePath, reader)
 		w := ObjectOperate(req, router)
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Contains(t, `{"reason":"challenge already exists. guidColName: name, guidValue: name","success":false}`, w.Body.String())
+		expectBytes, err := json.Marshal(gin.H{
+			"success": false,
+			"reason":  fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue),
+		})
+		assert.NoError(t, err)
+		assert.Contains(t, string(expectBytes), w.Body.String())
 	})
 }
 
