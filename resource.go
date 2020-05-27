@@ -163,7 +163,7 @@ func (r *Resource) DeleteResource(c *gin.Context) {
 	}
 }
 
-func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) {
+func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, taskBeforeCreateObject func(modelPtr interface{})) {
 	id, err := r.CheckResourceExistsById(c)
 	if err != nil {
 		return
@@ -177,6 +177,9 @@ func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 	if err := r.MustResourceNotExistsExceptSelfByModelPtr(c, modelPtr, GuidFieldJsonTag, id); err != nil {
 		HandleInternalServerError(c, err)
 		return
+	}
+	if taskBeforeCreateObject != nil {
+		taskBeforeCreateObject(modelPtr)
 	}
 	if err := Conn.UpdateObject(id, r.TableName, modelPtr); err != nil {
 		HandleInternalServerError(c, err)
