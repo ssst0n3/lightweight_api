@@ -132,14 +132,13 @@ func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 		HandleInternalServerError(c, err)
 		return
 	}
+	if taskBeforeCreateObject != nil {
+		taskBeforeCreateObject(modelPtr)
+	}
 	id, err := Conn.CreateObject(r.TableName, modelPtr)
 	if err != nil {
 		HandleInternalServerError(c, err)
 		return
-	}
-
-	if taskBeforeCreateObject != nil {
-		taskBeforeCreateObject(modelPtr)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
