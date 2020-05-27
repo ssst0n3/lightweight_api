@@ -72,11 +72,7 @@ func (r *Resource) CheckResourceExistsByGuidExceptSelf(c *gin.Context, guidColNa
 }
 
 func (r *Resource) MustResourceNotExistsByModelPtr(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) error {
-	if !lightweight_db.IsPointer(modelPtr) {
-		err := errors.New("modelPtr is not type of pointer")
-		CheckError(err)
-		return err
-	}
+	lightweight_db.MustIsPointer(modelPtr)
 	if GuidFieldJsonTag != "" {
 		guidFiled, find := lightweight_db.FieldByJsonTag(lightweight_db.Reflect(modelPtr), GuidFieldJsonTag)
 		if !find {
@@ -101,11 +97,7 @@ func (r *Resource) MustResourceNotExistsByModelPtr(c *gin.Context, modelPtr inte
 }
 
 func (r *Resource) MustResourceNotExistsExceptSelfByModelPtr(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, id int64) error {
-	if !lightweight_db.IsPointer(modelPtr) {
-		err := errors.New("modelPtr is not type of pointer")
-		CheckError(err)
-		return err
-	}
+	lightweight_db.MustIsPointer(modelPtr)
 	if GuidFieldJsonTag != "" {
 		guidFiled, find := lightweight_db.FieldByJsonTag(lightweight_db.Reflect(modelPtr), GuidFieldJsonTag)
 		if !find {
@@ -130,10 +122,7 @@ func (r *Resource) MustResourceNotExistsExceptSelfByModelPtr(c *gin.Context, mod
 }
 
 func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, taskBeforeCreateObject func(modelPtr interface{})) {
-	if !lightweight_db.IsPointer(modelPtr) {
-		HandleInternalServerError(c, errors.New("modelPtr is not type of pointer"))
-		return
-	}
+	lightweight_db.MustIsPointer(modelPtr)
 	if err := c.ShouldBindJSON(modelPtr); err != nil {
 		HandleStatusBadRequestError(c, err)
 		return
