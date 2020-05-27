@@ -126,11 +126,4 @@ func (r *Resource) TestResourceUpdateResource(t *testing.T, router *gin.Engine, 
 	req, _ := http.NewRequest(http.MethodPut, r.BaseRelativePath+"/"+strconv.FormatInt(id, 10), reader)
 	w := ObjectOperate(req, router)
 	assert.Equal(t, http.StatusOK, w.Code)
-
-	assert.NoError(t, Conn.OrmShowObjectByIdUsingReflect(r.TableName, id, modelPtr))
-	got, err := json.Marshal(modelPtr)
-	assert.NoError(t, err)
-	expect, err := json.Marshal(objUpdate)
-	assert.NoError(t, err)
-	assert.Contains(t, string(got), string(expect)[1:])
 }
