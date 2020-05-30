@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/ssst0n3/awesome_libs"
 	"github.com/ssst0n3/lightweight_db"
 	"net/http"
 	"strconv"
@@ -77,18 +78,18 @@ func (r *Resource) MustResourceNotExistsByModelPtr(c *gin.Context, modelPtr inte
 		guidFiled, find := lightweight_db.FieldByJsonTag(lightweight_db.Reflect(modelPtr), GuidFieldJsonTag)
 		if !find {
 			err := errors.New("cannot find field: " + GuidFieldJsonTag)
-			CheckError(err)
+			awesome_libs.CheckErr(err)
 			return err
 		}
 		guidValue := guidFiled.Interface()
 		exist, err := r.CheckResourceExistsByGuid(c, GuidFieldJsonTag, guidValue)
 		if err != nil {
-			CheckError(err)
+			awesome_libs.CheckErr(err)
 			return err
 		}
 		if exist {
 			err := errors.New(fmt.Sprintf("guidField: %s already exists", GuidFieldJsonTag))
-			CheckError(err)
+			awesome_libs.CheckErr(err)
 			return err
 		}
 	}
@@ -102,18 +103,18 @@ func (r *Resource) MustResourceNotExistsExceptSelfByModelPtr(c *gin.Context, mod
 		guidFiled, find := lightweight_db.FieldByJsonTag(lightweight_db.Reflect(modelPtr), GuidFieldJsonTag)
 		if !find {
 			err := errors.New("cannot find field: " + GuidFieldJsonTag)
-			CheckError(err)
+			awesome_libs.CheckErr(err)
 			return err
 		}
 		guidValue := guidFiled.Interface()
 		exist, err := r.CheckResourceExistsByGuidExceptSelf(c, GuidFieldJsonTag, guidValue, id)
 		if err != nil {
-			CheckError(err)
+			awesome_libs.CheckErr(err)
 			return err
 		}
 		if exist {
 			err := errors.New(fmt.Sprintf("guidField: %s already exists", GuidFieldJsonTag))
-			CheckError(err)
+			awesome_libs.CheckErr(err)
 			return err
 		}
 	}
