@@ -142,9 +142,7 @@ func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"success": true, "id": id,
-	})
+	Response200CreateSuccess(c, uint(id))
 }
 
 func (r *Resource) DeleteResource(c *gin.Context) {
@@ -155,12 +153,8 @@ func (r *Resource) DeleteResource(c *gin.Context) {
 
 	if err := Conn.DeleteObjectById(r.TableName, id); err != nil {
 		HandleInternalServerError(c, err)
-		return
 	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"success": true,
-		})
-		return
+		Response200DeleteSuccess(c)
 	}
 }
 
