@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/ssst0n3/awesome_libs"
-	"github.com/ssst0n3/lightweight_db"
+	awesomeError "github.com/ssst0n3/awesome_libs/error"
+	"github.com/ssst0n3/awesome_libs/reflect"
 	"net/http"
 	"strconv"
 )
@@ -73,23 +73,23 @@ func (r *Resource) CheckResourceExistsByGuidExceptSelf(c *gin.Context, guidColNa
 }
 
 func (r *Resource) MustResourceNotExistsByModelPtr(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) error {
-	lightweight_db.MustIsPointer(modelPtr)
+	reflect.MustPointer(modelPtr)
 	if GuidFieldJsonTag != "" {
-		guidFiled, find := lightweight_db.FieldByJsonTag(lightweight_db.Reflect(modelPtr), GuidFieldJsonTag)
+		guidFiled, find := reflect.FieldByJsonTag(reflect.Value(modelPtr), GuidFieldJsonTag)
 		if !find {
 			err := errors.New("cannot find field: " + GuidFieldJsonTag)
-			awesome_libs.CheckErr(err)
+			awesomeError.CheckErr(err)
 			return err
 		}
 		guidValue := guidFiled.Interface()
 		exist, err := r.CheckResourceExistsByGuid(c, GuidFieldJsonTag, guidValue)
 		if err != nil {
-			awesome_libs.CheckErr(err)
+			awesomeError.CheckErr(err)
 			return err
 		}
 		if exist {
 			err := errors.New(fmt.Sprintf("guidField: %s already exists", GuidFieldJsonTag))
-			awesome_libs.CheckErr(err)
+			awesomeError.CheckErr(err)
 			return err
 		}
 	}
@@ -98,23 +98,23 @@ func (r *Resource) MustResourceNotExistsByModelPtr(c *gin.Context, modelPtr inte
 }
 
 func (r *Resource) MustResourceNotExistsExceptSelfByModelPtr(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, id int64) error {
-	lightweight_db.MustIsPointer(modelPtr)
+	reflect.MustPointer(modelPtr)
 	if GuidFieldJsonTag != "" {
-		guidFiled, find := lightweight_db.FieldByJsonTag(lightweight_db.Reflect(modelPtr), GuidFieldJsonTag)
+		guidFiled, find := reflect.FieldByJsonTag(reflect.Value(modelPtr), GuidFieldJsonTag)
 		if !find {
 			err := errors.New("cannot find field: " + GuidFieldJsonTag)
-			awesome_libs.CheckErr(err)
+			awesomeError.CheckErr(err)
 			return err
 		}
 		guidValue := guidFiled.Interface()
 		exist, err := r.CheckResourceExistsByGuidExceptSelf(c, GuidFieldJsonTag, guidValue, id)
 		if err != nil {
-			awesome_libs.CheckErr(err)
+			awesomeError.CheckErr(err)
 			return err
 		}
 		if exist {
 			err := errors.New(fmt.Sprintf("guidField: %s already exists", GuidFieldJsonTag))
-			awesome_libs.CheckErr(err)
+			awesomeError.CheckErr(err)
 			return err
 		}
 	}
@@ -123,7 +123,7 @@ func (r *Resource) MustResourceNotExistsExceptSelfByModelPtr(c *gin.Context, mod
 }
 
 func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, taskBeforeCreateObject func(modelPtr interface{})) {
-	lightweight_db.MustIsPointer(modelPtr)
+	reflect.MustPointer(modelPtr)
 	if err := c.ShouldBindJSON(modelPtr); err != nil {
 		HandleStatusBadRequestError(c, err)
 		return
@@ -185,4 +185,17 @@ func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 		})
 		return
 	}
+}
+
+func (r *Resource) ShowResource(c *gin.Context) {
+	id, err := r.CheckResourceExistsById(c)
+	if err != nil {
+		return
+	}
+	result, err := Conn.OrmShowObjectByIdUsingReflectRet(r.TableName, id, r.Model)
+	if err != nil {
+		HandleInternalServerError(c, err)
+		return
+	}
+	c.JSON(http.StatusOK, result)
 }

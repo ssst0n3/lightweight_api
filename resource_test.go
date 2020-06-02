@@ -11,6 +11,7 @@ var challenge = Resource{
 	Name:             "challenge",
 	TableName:        "challenge",
 	BaseRelativePath: "/api/v1/challenge",
+	Model:            test_data.ChallengeWithId{},
 }
 
 func init() {
@@ -64,7 +65,7 @@ func TestResource_DeleteResource(t *testing.T) {
 func TestResource_UpdateResource(t *testing.T) {
 	router := gin.Default()
 	router.PUT(challenge.BaseRelativePath+"/:id", func(context *gin.Context) {
-		challenge.UpdateResource(context, &test_data.Challenge{}, test_data.ColumnNameChallengeName)
+		challenge.UpdateResource(context, &test_data.Challenge{}, test_data.ColumnNameChallengeName, nil)
 	})
 	Conn.DeleteAllObjects(test_data.TableNameChallenge)
 	Conn.ResetAutoIncrementSqlite(test_data.TableNameChallenge)
@@ -74,4 +75,14 @@ func TestResource_UpdateResource(t *testing.T) {
 		test_data.Challenge1Update.Challenge,
 		&test_data.ChallengeWithId{},
 	)
+}
+
+func TestResource_ShowResource(t *testing.T) {
+	router := gin.Default()
+	router.GET(challenge.BaseRelativePath+"/:id", func(context *gin.Context) {
+		challenge.ShowResource(context)
+	})
+	Conn.DeleteAllObjects(test_data.TableNameChallenge)
+	Conn.ResetAutoIncrementSqlite(test_data.TableNameChallenge)
+	challenge.TestResourceShowResource(t, router, test_data.Challenge1)
 }

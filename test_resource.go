@@ -127,3 +127,11 @@ func (r *Resource) TestResourceUpdateResource(t *testing.T, router *gin.Engine, 
 	w := ObjectOperate(req, router)
 	assert.Equal(t, http.StatusOK, w.Code)
 }
+
+func (r *Resource) TestResourceShowResource(t *testing.T, router *gin.Engine, obj interface{}) {
+	id, err := Conn.CreateObject(r.TableName, obj)
+	assert.NoError(t, err)
+	req, _ := http.NewRequest(http.MethodGet, r.BaseRelativePath+"/"+strconv.FormatInt(id, 10), nil)
+	w := ObjectOperate(req, router)
+	assert.Equal(t, http.StatusOK, w.Code)
+}
