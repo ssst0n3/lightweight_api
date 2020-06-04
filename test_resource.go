@@ -36,12 +36,12 @@ func (r *Resource) TestResourceListResource(t *testing.T, router *gin.Engine) {
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
-func (r *Resource) TestResourceCheckResourceExistsByGuid(t *testing.T, resource interface{}, guidColName string, guidValue interface{}) {
+func (r *Resource) TestResourceMustResourceNotExistsByGuid(t *testing.T, resource interface{}, guidColName string, guidValue interface{}) {
 	t.Run("not exists", func(t *testing.T) {
 		r.DeleteAllObjects()
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
-		exists, err := r.CheckResourceExistsByGuid(c, guidColName, guidValue)
+		exists, err := r.MustResourceNotExistsByGuid(c, guidColName, guidValue)
 		assert.NoError(t, err)
 		assert.Equal(t, false, exists)
 		assert.Equal(t, http.StatusOK, w.Code)
@@ -51,7 +51,7 @@ func (r *Resource) TestResourceCheckResourceExistsByGuid(t *testing.T, resource 
 		_, err := Conn.CreateObject(r.TableName, resource)
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
-		exists, err := r.CheckResourceExistsByGuid(c, guidColName, guidValue)
+		exists, err := r.MustResourceNotExistsByGuid(c, guidColName, guidValue)
 		assert.NoError(t, err)
 		assert.Equal(t, true, exists)
 		assert.Equal(t, http.StatusBadRequest, w.Code)

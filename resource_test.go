@@ -24,8 +24,8 @@ func TestResource_ListResource(t *testing.T) {
 	challenge.TestResourceListResource(t, router)
 }
 
-func TestResource_CheckResourceExistsByGuid(t *testing.T) {
-	challenge.TestResourceCheckResourceExistsByGuid(
+func TestResource_MustResourceNotExistsByGuid(t *testing.T) {
+	challenge.TestResourceMustResourceNotExistsByGuid(
 		t,
 		test_data.Challenge1.Challenge,
 		test_data.ColumnNameChallengeName,
