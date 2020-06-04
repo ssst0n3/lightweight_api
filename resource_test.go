@@ -28,7 +28,7 @@ func TestResource_CheckResourceExistsById(t *testing.T) {
 	router := gin.Default()
 	router.GET(challenge.BaseRelativePath+"/:id", func(context *gin.Context) {
 		//noinspection GoUnhandledErrorResult
-		challenge.CheckResourceExistsById(context)
+		challenge.MustResourceExistsById(context)
 	})
 	challenge.TestResourceCheckResourceExistsById(t, router, test_data.Challenge1.Challenge)
 }

@@ -26,7 +26,7 @@ func (r *Resource) ListResource(c *gin.Context) {
 	c.JSON(http.StatusOK, objects)
 }
 
-func (r *Resource) CheckResourceExistsById(c *gin.Context) (int64, error) {
+func (r *Resource) MustResourceExistsById(c *gin.Context) (int64, error) {
 	paramId := c.Param("id")
 	id, err := strconv.ParseInt(paramId, 10, 16)
 	if err != nil {
@@ -146,7 +146,7 @@ func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 }
 
 func (r *Resource) DeleteResource(c *gin.Context) {
-	id, err := r.CheckResourceExistsById(c)
+	id, err := r.MustResourceExistsById(c)
 	if err != nil {
 		return
 	}
@@ -159,7 +159,7 @@ func (r *Resource) DeleteResource(c *gin.Context) {
 }
 
 func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, taskBeforeCreateObject func(modelPtr interface{})) {
-	id, err := r.CheckResourceExistsById(c)
+	id, err := r.MustResourceExistsById(c)
 	if err != nil {
 		return
 	}
@@ -188,7 +188,7 @@ func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 }
 
 func (r *Resource) ShowResource(c *gin.Context) {
-	id, err := r.CheckResourceExistsById(c)
+	id, err := r.MustResourceExistsById(c)
 	if err != nil {
 		return
 	}
