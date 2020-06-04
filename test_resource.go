@@ -36,23 +36,6 @@ func (r *Resource) TestResourceListResource(t *testing.T, router *gin.Engine) {
 	assert.Equal(t, http.StatusOK, w.Code)
 }
 
-func (r *Resource) TestResourceCheckResourceExistsById(t *testing.T, router *gin.Engine, resource interface{}) {
-	t.Run("not exists", func(t *testing.T) {
-		r.DeleteAllObjects()
-		req, _ := http.NewRequest(http.MethodGet, r.BaseRelativePath+"/1", nil)
-		w := ObjectOperate(req, router)
-		assert.Equal(t, http.StatusBadRequest, w.Code)
-	})
-	t.Run("exists", func(t *testing.T) {
-		r.DeleteAllObjects()
-		id, err := Conn.CreateObject(r.TableName, resource)
-		assert.NoError(t, err)
-		req, _ := http.NewRequest(http.MethodGet, r.BaseRelativePath+fmt.Sprintf("/%d", id), nil)
-		w := ObjectOperate(req, router)
-		assert.Equal(t, http.StatusOK, w.Code)
-	})
-}
-
 func (r *Resource) TestResourceCheckResourceExistsByGuid(t *testing.T, resource interface{}, guidColName string, guidValue interface{}) {
 	t.Run("not exists", func(t *testing.T) {
 		r.DeleteAllObjects()

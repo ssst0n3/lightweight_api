@@ -7,7 +7,6 @@ import (
 	awesomeError "github.com/ssst0n3/awesome_libs/error"
 	"github.com/ssst0n3/awesome_libs/reflect"
 	"net/http"
-	"strconv"
 )
 
 type Resource struct {
@@ -24,24 +23,6 @@ func (r *Resource) ListResource(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, objects)
-}
-
-func (r *Resource) MustResourceExistsById(c *gin.Context) (int64, error) {
-	paramId := c.Param("id")
-	id, err := strconv.ParseInt(paramId, 10, 16)
-	if err != nil {
-		HandleStatusBadRequestError(c, err)
-		return id, err
-	}
-
-	if !Conn.IsResourceExistsById(r.TableName, id) {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"reason":  fmt.Sprintf("%sId not exists.", r.Name),
-		})
-		return id, err
-	}
-	return id, error(nil)
 }
 
 func (r *Resource) CheckResourceExistsByGuid(c *gin.Context, guidColName string, guidValue interface{}) (bool, error) {
