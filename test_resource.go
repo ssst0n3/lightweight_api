@@ -83,7 +83,7 @@ func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		expectBytes, err := json.Marshal(gin.H{
 			"success": false,
-			"reason":  fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue),
+			"reason":  fmt.Sprintf(GuidFieldMustNotExists, guidColName),
 		})
 		assert.NoError(t, err)
 		assert.Contains(t, string(expectBytes), w.Body.String())

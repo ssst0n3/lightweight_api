@@ -82,8 +82,10 @@ func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 		return
 	}
 
-	if err := r.MustResourceNotExistsByModelPtrWithGuid(c, modelPtr, GuidFieldJsonTag); err != nil {
-		return
+	if len(GuidFieldJsonTag) > 0 {
+		if err := r.MustResourceNotExistsByModelPtrWithGuid(c, modelPtr, GuidFieldJsonTag); err != nil {
+			return
+		}
 	}
 	if taskBeforeCreateObject != nil {
 		taskBeforeCreateObject(modelPtr)

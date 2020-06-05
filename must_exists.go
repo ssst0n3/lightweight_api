@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	awesomeError "github.com/ssst0n3/awesome_libs/error"
 	"net/http"
 )
 
@@ -46,7 +45,7 @@ func (r *Resource) MustResourceNotExistsByModelPtrWithGuid(c *gin.Context, model
 	}
 	if exists {
 		err := errors.New(fmt.Sprintf(GuidFieldMustNotExists, GuidFieldJsonTag))
-		HandleInternalServerError(c, err)
+		HandleStatusBadRequestError(c, err)
 		return err
 	}
 	return nil
