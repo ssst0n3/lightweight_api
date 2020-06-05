@@ -1,10 +1,7 @@
 package lightweight_api
 
 import (
-	"errors"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	awesomeError "github.com/ssst0n3/awesome_libs/error"
 	"github.com/ssst0n3/awesome_libs/reflect"
 	"net/http"
 )
@@ -23,56 +20,6 @@ func (r *Resource) ListResource(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, objects)
-}
-
-func (r *Resource) MustResourceNotExistsByModelPtrOld(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) error {
-	reflect.MustPointer(modelPtr)
-	if GuidFieldJsonTag != "" {
-		guidFiled, find := reflect.FieldByJsonTag(reflect.Value(modelPtr), GuidFieldJsonTag)
-		if !find {
-			err := errors.New("cannot find field: " + GuidFieldJsonTag)
-			awesomeError.CheckErr(err)
-			return err
-		}
-		guidValue := guidFiled.Interface()
-		exist, err := r.MustResourceNotExistsByGuid(c, GuidFieldJsonTag, guidValue)
-		if err != nil {
-			awesomeError.CheckErr(err)
-			return err
-		}
-		if exist {
-			err := errors.New(fmt.Sprintf("guidField: %s already exists", GuidFieldJsonTag))
-			awesomeError.CheckErr(err)
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (r *Resource) MustResourceNotExistsExceptSelfByModelPtr(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, id int64) error {
-	reflect.MustPointer(modelPtr)
-	if GuidFieldJsonTag != "" {
-		guidFiled, find := reflect.FieldByJsonTag(reflect.Value(modelPtr), GuidFieldJsonTag)
-		if !find {
-			err := errors.New("cannot find field: " + GuidFieldJsonTag)
-			awesomeError.CheckErr(err)
-			return err
-		}
-		guidValue := guidFiled.Interface()
-		exist, err := r.MustResourceNotExistsExceptSelfByGuid(c, GuidFieldJsonTag, guidValue, id)
-		if err != nil {
-			awesomeError.CheckErr(err)
-			return err
-		}
-		if exist {
-			err := errors.New(fmt.Sprintf("guidField: %s already exists", GuidFieldJsonTag))
-			awesomeError.CheckErr(err)
-			return err
-		}
-	}
-
-	return nil
 }
 
 func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, taskBeforeCreateObject func(modelPtr interface{})) {
@@ -123,7 +70,7 @@ func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 		return
 	}
 
-	if err := r.MustResourceNotExistsExceptSelfByModelPtr(c, modelPtr, GuidFieldJsonTag, id); err != nil {
+	if err := r.MustResourceNotExistsExceptSelfByModelPtrWithGuid(c, modelPtr, GuidFieldJsonTag, id); err != nil {
 		HandleInternalServerError(c, err)
 		return
 	}

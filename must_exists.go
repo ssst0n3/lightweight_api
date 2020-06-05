@@ -23,18 +23,16 @@ func (r *Resource) MustResourceExistsById(c *gin.Context) (int64, error) {
 }
 
 
-func (r *Resource) MustResourceNotExistsByGuid(c *gin.Context, guidColName string, guidValue interface{}) (bool, error) {
+func (r *Resource) MustResourceNotExistsByGuid(c *gin.Context, guidColName string, guidValue interface{}) error {
 	if exists, err := r.CheckResourceExistsByGuid(guidColName, guidValue); err != nil {
 		HandleInternalServerError(c, err)
-		return false, err
+		return err
 	} else if exists {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"reason":  fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue),
-		})
-		return true, nil
+		err := errors.New(fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue))
+		HandleStatusBadRequestError(c, err)
+		return err
 	}
-	return false, nil
+	return nil
 }
 
 func (r *Resource) MustResourceNotExistsByModelPtrWithGuid(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) error {
@@ -51,16 +49,26 @@ func (r *Resource) MustResourceNotExistsByModelPtrWithGuid(c *gin.Context, model
 	return nil
 }
 
-func (r *Resource) MustResourceNotExistsExceptSelfByGuid(c *gin.Context, guidColName string, guidValue interface{}, id int64) (bool, error) {
+func (r *Resource) MustResourceNotExistsExceptSelfByGuid(c *gin.Context, guidColName string, guidValue interface{}, id int64) error {
 	if exists, err := r.CheckResourceExistsExceptSelfByGuid(guidColName, guidValue, id); err != nil {
 		HandleInternalServerError(c, err)
-		return false, err
+		return err
 	} else if exists {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"reason":  fmt.Sprintf(ResourceMustNotExistsExceptSelf, r.Name),
-		})
-		return true, nil
+		err := errors.New(fmt.Sprintf(ResourceMustNotExistsExceptSelf, r.Name))
+		HandleStatusBadRequestError(c, err)
+		return err
 	}
-	return false, nil
+	return nil
+}
+
+func (r *Resource) MustResourceNotExistsExceptSelfByModelPtrWithGuid(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, id int64) error {
+	if exists, err := r.CheckResourceExistsExceptSelfByModelPtrWithGuid(modelPtr, GuidFieldJsonTag, id); err != nil {
+		HandleInternalServerError(c, err)
+		return err
+	} else if exists {
+		err := errors.New(fmt.Sprintf(ResourceMustNotExistsExceptSelf, r.Name))
+		HandleStatusBadRequestError(c, err)
+		return err
+	}
+	return nil
 }

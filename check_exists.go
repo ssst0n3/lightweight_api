@@ -46,3 +46,23 @@ func (r *Resource) CheckResourceExistsByModelPtrWithGuid(modelPtr interface{}, G
 func (r *Resource) CheckResourceExistsExceptSelfByGuid(guidColName string, guidValue interface{}, id int64) (bool, error) {
 	return Conn.IsResourceExistsExceptSelfByGuid(r.TableName, guidColName, guidValue, id)
 }
+
+func (r *Resource) CheckResourceExistsExceptSelfByModelPtrWithGuid(modelPtr interface{}, GuidFieldJsonTag string, id int64) (bool, error) {
+	reflect.MustPointer(modelPtr)
+	if GuidFieldJsonTag == "" {
+		// please make sure by developer
+		panic(GuidTagMustNotBeEmpty)
+	}
+	guidFiled, find := reflect.FieldByJsonTag(reflect.Value(modelPtr), GuidFieldJsonTag)
+	if !find {
+		// please make sure by developer
+		panic(fmt.Sprintf(FieldCannotFind, GuidFieldJsonTag))
+	}
+	guidValue := guidFiled.Interface()
+	exists, err := r.CheckResourceExistsExceptSelfByGuid(GuidFieldJsonTag, guidValue, id)
+	if err != nil {
+		awesomeError.CheckErr(err)
+		return false, err
+	}
+	return exists, nil
+}

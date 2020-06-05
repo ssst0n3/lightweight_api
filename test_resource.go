@@ -41,9 +41,8 @@ func (r *Resource) TestResourceMustResourceNotExistsByGuid(t *testing.T, resourc
 		r.DeleteAllObjects()
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
-		exists, err := r.MustResourceNotExistsByGuid(c, guidColName, guidValue)
+		err := r.MustResourceNotExistsByGuid(c, guidColName, guidValue)
 		assert.NoError(t, err)
-		assert.Equal(t, false, exists)
 		assert.Equal(t, http.StatusOK, w.Code)
 	})
 	t.Run("exists", func(t *testing.T) {
@@ -51,9 +50,8 @@ func (r *Resource) TestResourceMustResourceNotExistsByGuid(t *testing.T, resourc
 		_, err := Conn.CreateObject(r.TableName, resource)
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
-		exists, err := r.MustResourceNotExistsByGuid(c, guidColName, guidValue)
-		assert.NoError(t, err)
-		assert.Equal(t, true, exists)
+		err = r.MustResourceNotExistsByGuid(c, guidColName, guidValue)
+		assert.Error(t, err)
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		expect, err := json.Marshal(gin.H{
 			"success": false,
