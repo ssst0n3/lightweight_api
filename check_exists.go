@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func (r *Resource) CheckResourceExistsById(c *gin.Context) (bool, int64, error) {
+func (r *Resource) CheckResourceExistsByIdAutoParseParam(c *gin.Context) (bool, int64, error) {
 	paramId := c.Param("id")
 	id, err := strconv.ParseInt(paramId, 10, 16)
 	if err != nil {

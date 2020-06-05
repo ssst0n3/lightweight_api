@@ -8,7 +8,7 @@ import (
 )
 
 func (r *Resource) MustResourceExistsById(c *gin.Context) (int64, error) {
-	exists, id, err := r.CheckResourceExistsById(c)
+	exists, id, err := r.CheckResourceExistsByIdAutoParseParam(c)
 	if err != nil {
 		HandleInternalServerError(c, err)
 		return id, err
