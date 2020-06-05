@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func (r *Resource) MustResourceExistsByIdAutoParseParam(c *gin.Context) (int64, error) {
@@ -14,12 +13,24 @@ func (r *Resource) MustResourceExistsByIdAutoParseParam(c *gin.Context) (int64, 
 		return id, err
 	}
 	if !exists {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"success": false,
-			"reason":  fmt.Sprintf(ResourceMustExists, r.Name),
-		})
+		err := errors.New(fmt.Sprintf(ResourceMustExists, r.Name))
+		HandleStatusBadRequestError(c, err)
+		return id, err
 	}
 	return id, nil
+}
+
+func (r *Resource) MustResourceExistsById(c *gin.Context, id int64) error {
+	if exists, err := r.CheckResourceExistsById(id); err != nil {
+		HandleInternalServerError(c, err)
+	} else {
+		if !exists {
+			err := errors.New(fmt.Sprintf(ResourceMustExists, r.Name))
+			HandleStatusBadRequestError(c, err)
+			return err
+		}
+	}
+	return nil
 }
 
 func (r *Resource) MustResourceExistsByGuid(c *gin.Context, guidColName string, guidValue interface{}) error {

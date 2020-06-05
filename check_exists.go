@@ -19,9 +19,9 @@ func (r *Resource) CheckResourceExistsByIdAutoParseParam(c *gin.Context) (bool, 
 	return exists, id, err
 }
 
-//func (r *Resource) CheckResourceExistsById(id int64) (bool, error) {
-//	return Conn.IsResourceExistsById(r.TableName, id)
-//}
+func (r *Resource) CheckResourceExistsById(id int64) (bool, error) {
+	return Conn.IsResourceExistsById(r.TableName, id)
+}
 
 func (r *Resource) CheckResourceExistsByGuid(guidColName string, guidValue interface{}) (bool, error) {
 	return Conn.IsResourceExistsByGuid(r.TableName, guidColName, guidValue)
