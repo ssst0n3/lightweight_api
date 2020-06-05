@@ -47,7 +47,7 @@ func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 }
 
 func (r *Resource) DeleteResource(c *gin.Context) {
-	id, err := r.MustResourceExistsById(c)
+	id, err := r.MustResourceExistsByIdAutoParseParam(c)
 	if err != nil {
 		return
 	}
@@ -60,7 +60,7 @@ func (r *Resource) DeleteResource(c *gin.Context) {
 }
 
 func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, taskBeforeCreateObject func(modelPtr interface{})) {
-	id, err := r.MustResourceExistsById(c)
+	id, err := r.MustResourceExistsByIdAutoParseParam(c)
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 }
 
 func (r *Resource) ShowResource(c *gin.Context) {
-	id, err := r.MustResourceExistsById(c)
+	id, err := r.MustResourceExistsByIdAutoParseParam(c)
 	if err != nil {
 		return
 	}

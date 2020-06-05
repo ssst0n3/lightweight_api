@@ -95,7 +95,8 @@ func (r *Resource) TestResourceDeleteResource(t *testing.T, router *gin.Engine, 
 	req, _ := http.NewRequest(http.MethodDelete, r.BaseRelativePath+"/"+strconv.FormatInt(id, 10), nil)
 	w := ObjectOperate(req, router)
 	assert.Equal(t, http.StatusOK, w.Code)
-	exists := Conn.IsResourceExistsById(r.TableName, id)
+	exists, err := Conn.IsResourceExistsById(r.TableName, id)
+	assert.NoError(t, err)
 	assert.Equal(t, false, exists)
 }
 

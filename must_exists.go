@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (r *Resource) MustResourceExistsById(c *gin.Context) (int64, error) {
+func (r *Resource) MustResourceExistsByIdAutoParseParam(c *gin.Context) (int64, error) {
 	exists, id, err := r.CheckResourceExistsByIdAutoParseParam(c)
 	if err != nil {
 		HandleInternalServerError(c, err)
