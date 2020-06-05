@@ -22,6 +22,17 @@ func (r *Resource) MustResourceExistsById(c *gin.Context) (int64, error) {
 	return id, nil
 }
 
+func (r *Resource) MustResourceExistsByGuid(c *gin.Context, guidColName string, guidValue interface{}) error {
+	if exists, err := r.CheckResourceExistsByGuid(guidColName, guidValue); err != nil {
+		HandleInternalServerError(c, err)
+		return err
+	} else if !exists {
+		err := errors.New(fmt.Sprintf(ResourceMustExists, r.Name))
+		HandleStatusBadRequestError(c, err)
+		return err
+	}
+	return nil
+}
 
 func (r *Resource) MustResourceNotExistsByGuid(c *gin.Context, guidColName string, guidValue interface{}) error {
 	if exists, err := r.CheckResourceExistsByGuid(guidColName, guidValue); err != nil {
