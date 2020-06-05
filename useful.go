@@ -52,8 +52,9 @@ func (r *Resource) MustResourceNotExistsByGuid(c *gin.Context, guidColName strin
 	return false, nil
 }
 
-
-
+func (r *Resource)CheckResourceExistsExceptSelfByGuid(guidColName string, guidValue interface{}, id int64) (bool, error) {
+	return Conn.IsResourceExistsExceptSelfByGuid(r.TableName, guidColName, guidValue, id)
+}
 
 
 

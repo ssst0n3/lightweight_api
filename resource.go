@@ -25,7 +25,7 @@ func (r *Resource) ListResource(c *gin.Context) {
 	c.JSON(http.StatusOK, objects)
 }
 
-func (r *Resource) MustResourceNotExistsByGuidExceptSelf(c *gin.Context, guidColName string, guidValue interface{}, id int64) (bool, error) {
+func (r *Resource) MustResourceNotExistsExceptSelfByGuid(c *gin.Context, guidColName string, guidValue interface{}, id int64) (bool, error) {
 	if exists, err := Conn.IsResourceExistsExceptSelfByGuid(r.TableName, guidColName, guidValue, id); err != nil {
 		HandleInternalServerError(c, err)
 		return false, err
@@ -74,7 +74,7 @@ func (r *Resource) MustResourceNotExistsExceptSelfByModelPtr(c *gin.Context, mod
 			return err
 		}
 		guidValue := guidFiled.Interface()
-		exist, err := r.MustResourceNotExistsByGuidExceptSelf(c, GuidFieldJsonTag, guidValue, id)
+		exist, err := r.MustResourceNotExistsExceptSelfByGuid(c, GuidFieldJsonTag, guidValue, id)
 		if err != nil {
 			awesomeError.CheckErr(err)
 			return err
