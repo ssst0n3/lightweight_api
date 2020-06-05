@@ -70,9 +70,11 @@ func (r *Resource) UpdateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 		return
 	}
 
-	if err := r.MustResourceNotExistsExceptSelfByModelPtrWithGuid(c, modelPtr, GuidFieldJsonTag, id); err != nil {
-		HandleInternalServerError(c, err)
-		return
+	if len(GuidFieldJsonTag) > 0 {
+		if err := r.MustResourceNotExistsExceptSelfByModelPtrWithGuid(c, modelPtr, GuidFieldJsonTag, id); err != nil {
+			HandleInternalServerError(c, err)
+			return
+		}
 	}
 	if taskBeforeCreateObject != nil {
 		taskBeforeCreateObject(modelPtr)
