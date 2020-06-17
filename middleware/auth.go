@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ssst0n3/awesome_libs/cipher"
 	error2 "github.com/ssst0n3/awesome_libs/error"
@@ -33,7 +32,7 @@ func GenerateToken(userId uint, isAdmin bool) (string, error) {
 
 func getSecretKey(_ *jwt.Token) (interface{}, error) {
 	if len(JwtSecret) == 0 {
-		error2.CheckPanic(errors.New(PanicJwtSecretHasNotBeenInited))
+		error2.CheckPanic(PanicJwtSecretHasNotBeenInited)
 	}
 	return JwtSecret, nil
 }
