@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-var closeJwt = false
+var CloseJwt = false
 
 func GetToken(c *gin.Context) (string, error) {
 	token, err := c.Cookie("token")
@@ -22,7 +22,7 @@ func GetToken(c *gin.Context) (string, error) {
 
 func JwtAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if !closeJwt {
+		if !CloseJwt {
 			token, err := GetToken(c)
 			if err != nil {
 				awesomeError.CheckErr(err)
@@ -56,7 +56,7 @@ func JwtAdmin() gin.HandlerFunc {
 
 func JwtUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if !closeJwt {
+		if !CloseJwt {
 			token, err := c.Cookie("token")
 			if err != nil {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
