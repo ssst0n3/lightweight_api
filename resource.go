@@ -2,7 +2,7 @@ package lightweight_api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ssst0n3/awesome_libs/reflect"
+	"github.com/ssst0n3/awesome_libs/awesome_reflect"
 	"net/http"
 )
 
@@ -23,7 +23,7 @@ func (r *Resource) ListResource(c *gin.Context) {
 }
 
 func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, taskBeforeCreateObject func(modelPtr interface{})) {
-	reflect.MustPointer(modelPtr)
+	awesome_reflect.MustPointer(modelPtr)
 	if err := c.ShouldBindJSON(modelPtr); err != nil {
 		HandleStatusBadRequestError(c, err)
 		return

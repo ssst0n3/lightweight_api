@@ -3,8 +3,8 @@ package lightweight_api
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	awesomeError "github.com/ssst0n3/awesome_libs/error"
-	"github.com/ssst0n3/awesome_libs/reflect"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
+	"github.com/ssst0n3/awesome_libs/awesome_reflect"
 	"strconv"
 )
 
@@ -12,7 +12,7 @@ func (r *Resource) CheckResourceExistsByIdAutoParseParam(c *gin.Context) (bool, 
 	paramId := c.Param("id")
 	id, err := strconv.ParseInt(paramId, 10, 16)
 	if err != nil {
-		awesomeError.CheckErr(err)
+		awesome_error.CheckErr(err)
 		return false, id, err
 	}
 	exists, err := Conn.IsResourceExistsById(r.TableName, id)
@@ -28,12 +28,12 @@ func (r *Resource) CheckResourceExistsByGuid(guidColName string, guidValue inter
 }
 
 func (r *Resource) CheckResourceExistsByModelPtrWithGuid(modelPtr interface{}, GuidFieldJsonTag string) (bool, error) {
-	reflect.MustPointer(modelPtr)
+	awesome_reflect.MustPointer(modelPtr)
 	if GuidFieldJsonTag == "" {
 		// please make sure by developer
 		panic(GuidTagMustNotBeEmpty)
 	}
-	guidFiled, find := reflect.FieldByJsonTag(reflect.Value(modelPtr), GuidFieldJsonTag)
+	guidFiled, find := awesome_reflect.FieldByJsonTag(awesome_reflect.Value(modelPtr), GuidFieldJsonTag)
 	if !find {
 		// please make sure by developer
 		panic(fmt.Sprintf(FieldCannotFind, GuidFieldJsonTag))
@@ -41,7 +41,7 @@ func (r *Resource) CheckResourceExistsByModelPtrWithGuid(modelPtr interface{}, G
 	guidValue := guidFiled.Interface()
 	exists, err := r.CheckResourceExistsByGuid(GuidFieldJsonTag, guidValue)
 	if err != nil {
-		awesomeError.CheckErr(err)
+		awesome_error.CheckErr(err)
 		return false, err
 	}
 	return exists, nil
@@ -52,12 +52,12 @@ func (r *Resource) CheckResourceExistsExceptSelfByGuid(guidColName string, guidV
 }
 
 func (r *Resource) CheckResourceExistsExceptSelfByModelPtrWithGuid(modelPtr interface{}, GuidFieldJsonTag string, id int64) (bool, error) {
-	reflect.MustPointer(modelPtr)
+	awesome_reflect.MustPointer(modelPtr)
 	if GuidFieldJsonTag == "" {
 		// please make sure by developer
 		panic(GuidTagMustNotBeEmpty)
 	}
-	guidFiled, find := reflect.FieldByJsonTag(reflect.Value(modelPtr), GuidFieldJsonTag)
+	guidFiled, find := awesome_reflect.FieldByJsonTag(awesome_reflect.Value(modelPtr), GuidFieldJsonTag)
 	if !find {
 		// please make sure by developer
 		panic(fmt.Sprintf(FieldCannotFind, GuidFieldJsonTag))
@@ -65,7 +65,7 @@ func (r *Resource) CheckResourceExistsExceptSelfByModelPtrWithGuid(modelPtr inte
 	guidValue := guidFiled.Interface()
 	exists, err := r.CheckResourceExistsExceptSelfByGuid(GuidFieldJsonTag, guidValue, id)
 	if err != nil {
-		awesomeError.CheckErr(err)
+		awesome_error.CheckErr(err)
 		return false, err
 	}
 	return exists, nil

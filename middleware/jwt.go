@@ -3,7 +3,7 @@ package middleware
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	awesomeError "github.com/ssst0n3/awesome_libs/error"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"net/http"
 )
 
@@ -25,7 +25,7 @@ func JwtAdmin() gin.HandlerFunc {
 		if !CloseJwt {
 			token, err := GetToken(c)
 			if err != nil {
-				awesomeError.CheckErr(err)
+				awesome_error.CheckErr(err)
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"auth":   false,
 					"reason": "none token",
@@ -35,7 +35,7 @@ func JwtAdmin() gin.HandlerFunc {
 
 			claims, err := ParseToken(token)
 			if err != nil {
-				awesomeError.CheckErr(err)
+				awesome_error.CheckErr(err)
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"auth":   false,
 					"reason": err.Error(),
@@ -68,7 +68,7 @@ func JwtUser() gin.HandlerFunc {
 
 			_, err = ParseToken(token)
 			if err != nil {
-				awesomeError.CheckErr(err)
+				awesome_error.CheckErr(err)
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 					"auth":   false,
 					"reason": err.Error(),

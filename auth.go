@@ -2,7 +2,7 @@ package lightweight_api
 
 import (
 	"github.com/gin-gonic/gin"
-	awesomeError "github.com/ssst0n3/awesome_libs/error"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/lightweight_api/middleware"
 )
 
@@ -36,7 +36,7 @@ func GetUserId(c *gin.Context) (uint, error) {
 func GetClaims(c *gin.Context) (*middleware.Claims, error) {
 	token, err := middleware.GetToken(c)
 	if err != nil {
-		awesomeError.CheckErr(err)
+		awesome_error.CheckErr(err)
 		return nil, err
 	}
 	return middleware.ParseToken(token)

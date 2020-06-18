@@ -2,12 +2,12 @@ package lightweight_api
 
 import (
 	"github.com/gin-gonic/gin"
-	awesomeError "github.com/ssst0n3/awesome_libs/error"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"net/http"
 )
 
 func HandleInternalServerError(c *gin.Context, err error) {
-	awesomeError.CheckErr(err)
+	awesome_error.CheckErr(err)
 	if !c.Writer.Written() {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"success": false,
@@ -17,7 +17,7 @@ func HandleInternalServerError(c *gin.Context, err error) {
 }
 
 func HandleStatusBadRequestError(c *gin.Context, err error) {
-	awesomeError.CheckErr(err)
+	awesome_error.CheckErr(err)
 	if !c.Writer.Written() {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"success": false,
