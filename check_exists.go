@@ -10,7 +10,7 @@ import (
 
 func (r *Resource) CheckResourceExistsByIdAutoParseParam(c *gin.Context) (bool, int64, error) {
 	paramId := c.Param("id")
-	id, err := strconv.ParseInt(paramId, 10, 16)
+	id, err := strconv.ParseInt(paramId, 10, 64)
 	if err != nil {
 		awesome_error.CheckErr(err)
 		return false, id, err
