@@ -10,9 +10,9 @@ const PanicJwtSecretHasNotBeenInited = "JwtSecretHasNotBeenInited"
 
 var JwtSecret []byte
 
-func GenerateToken(userId uint, isAdmin bool) (string, error) {
+func GenerateToken(userId uint, isAdmin bool, duration time.Duration) (string, error) {
 	nowTime := time.Now()
-	expireTime := nowTime.Add(3 * time.Hour)
+	expireTime := nowTime.Add(duration)
 	claims := Claims{
 		UserId:  userId,
 		IsAdmin: isAdmin,
