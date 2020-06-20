@@ -50,7 +50,8 @@ func (r *Resource) MustResourceNotExistsByGuid(c *gin.Context, guidColName strin
 		HandleInternalServerError(c, err)
 		return err
 	} else if exists {
-		err := errors.New(fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue))
+		//err := errors.New(fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue))
+		err := errors.New(fmt.Sprintf(GuidFieldMustNotExists, guidColName))
 		HandleStatusBadRequestError(c, err)
 		return err
 	}

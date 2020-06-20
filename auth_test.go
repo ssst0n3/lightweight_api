@@ -6,12 +6,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
+	"time"
 )
 
 func TestAuth_GetUserId(t *testing.T) {
 	userId := uint(1)
 	middleware.JwtSecret = []byte("example")
-	token, err := middleware.GenerateToken(userId, true)
+	token, err := middleware.GenerateToken(userId, true, 3*time.Hour)
 	c := &gin.Context{
 		Request: &http.Request{
 			Header: http.Header{

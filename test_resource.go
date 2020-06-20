@@ -55,7 +55,8 @@ func (r *Resource) TestResourceMustResourceNotExistsByGuid(t *testing.T, resourc
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		expect, err := json.Marshal(gin.H{
 			"success": false,
-			"reason":  fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue),
+			//"reason":  fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue),
+			"reason": fmt.Sprintf(GuidFieldMustNotExists, guidColName),
 		})
 		assert.NoError(t, err)
 		assert.Equal(t, string(expect), w.Body.String())
