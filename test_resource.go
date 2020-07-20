@@ -24,6 +24,12 @@ func ObjectOperate(req *http.Request, router *gin.Engine) *httptest.ResponseReco
 	return w
 }
 
+func TestOk(t *testing.T, method string, path string, router *gin.Engine) {
+	req, _ := http.NewRequest(method, path, nil)
+	w := ObjectOperate(req, router)
+	assert.Equal(t, http.StatusOK, w.Code)
+}
+
 func (r *Resource) DeleteAllThenObjectOperate(req *http.Request, router *gin.Engine) *httptest.ResponseRecorder {
 	r.DeleteAllObjects()
 	w := ObjectOperate(req, router)
