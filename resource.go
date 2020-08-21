@@ -22,7 +22,10 @@ func (r *Resource) ListResource(c *gin.Context) {
 	c.JSON(http.StatusOK, objects)
 }
 
-func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, taskBeforeCreateObject func(modelPtr interface{})) {
+func (r *Resource) CreateResource(
+	c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string,
+	taskBeforeCreateObject func(modelPtr interface{}), taskAfterCreateObject func(id int64),
+) {
 	awesome_reflect.MustPointer(modelPtr)
 	if err := c.ShouldBindJSON(modelPtr); err != nil {
 		HandleStatusBadRequestError(c, err)
@@ -41,6 +44,9 @@ func (r *Resource) CreateResource(c *gin.Context, modelPtr interface{}, GuidFiel
 	if err != nil {
 		HandleInternalServerError(c, err)
 		return
+	}
+	if taskAfterCreateObject != nil {
+		taskAfterCreateObject(id)
 	}
 
 	Response200CreateSuccess(c, uint(id))
