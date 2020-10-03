@@ -7,5 +7,5 @@ import (
 var Conn lightweight_db.Connector
 
 func InitConnector(driverName string, dsn string) {
-	lightweight_db.GetNewConnector(driverName, dsn)
+	Conn = lightweight_db.GetNewConnector(driverName, dsn)
 }
