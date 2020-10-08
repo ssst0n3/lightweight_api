@@ -1,8 +1,12 @@
 package lightweight_api
 
 import (
+	"encoding/json"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
+	"github.com/ssst0n3/awesome_libs/awesome_reflect"
 	"github.com/ssst0n3/lightweight_db/test/test_data"
+	"github.com/stretchr/testify/assert"
 	_ "modernc.org/sqlite"
 	"testing"
 )
@@ -12,6 +16,7 @@ var challenge = Resource{
 	TableName:        "challenge",
 	BaseRelativePath: "/api/v1/challenge",
 	Model:            test_data.Challenge{},
+	GuidFieldJsonTag: test_data.ColumnNameChallengeName,
 }
 
 func init() {
@@ -33,11 +38,16 @@ func TestResource_MustResourceNotExistsByGuid(t *testing.T) {
 	)
 }
 
+func TestResource_CreateResourceNew(t *testing.T) {
+	awesome_reflect.MustNotPointer(challenge.Model)
+	modelPtr := awesome_reflect.EmptyPointerOfModel(challenge.Model)
+	assert.NoError(t, json.Unmarshal([]byte(`{"name":"name"}`), modelPtr))
+	spew.Dump(modelPtr)
+}
+
 func TestResource_CreateResource(t *testing.T) {
 	router := gin.Default()
-	router.POST(challenge.BaseRelativePath, func(context *gin.Context) {
-		challenge.CreateResource(context, &test_data.Challenge{}, test_data.ColumnNameChallengeName, nil, nil)
-	})
+	router.POST(challenge.BaseRelativePath, challenge.CreateResource)
 	challenge.TestResourceCreateResource(
 		t, router,
 		test_data.Challenge1.Challenge,
@@ -55,9 +65,7 @@ func TestResource_DeleteResource(t *testing.T) {
 // Please Delete and Reset Table by your self
 func TestResource_UpdateResource(t *testing.T) {
 	router := gin.Default()
-	router.PUT(challenge.BaseRelativePath+"/:id", func(context *gin.Context) {
-		challenge.UpdateResource(context, &test_data.Challenge{}, test_data.ColumnNameChallengeName, nil)
-	})
+	router.PUT(challenge.BaseRelativePath+"/:id", challenge.UpdateResource)
 	Conn.DeleteAllObjects(test_data.TableNameChallenge)
 	Conn.ResetAutoIncrementSqlite(test_data.TableNameChallenge)
 	challenge.TestResourceUpdateResource(
