@@ -23,6 +23,15 @@ func (r *Resource) ListResource(c *gin.Context) {
 	c.JSON(http.StatusOK, objects)
 }
 
+func (r *Resource) MapResourceById(c *gin.Context) {
+	objects, err := Conn.MapAllPropertiesByTableName(r.TableName)
+	if err != nil {
+		HandleInternalServerError(c, err)
+		return
+	}
+	c.JSON(http.StatusOK, objects)
+}
+
 func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject func(modelPtr interface{}), taskAfterCreateObject func(id int64)) {
 	awesome_reflect.MustNotPointer(r.Model)
 	modelPtr := awesome_reflect.EmptyPointerOfModel(r.Model)
