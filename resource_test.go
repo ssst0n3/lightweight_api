@@ -11,7 +11,7 @@ var challenge = Resource{
 	Name:             "challenge",
 	TableName:        "challenge",
 	BaseRelativePath: "/api/v1/challenge",
-	Model:            test_data.ChallengeWithId{},
+	Model:            test_data.Challenge{},
 }
 
 func init() {
@@ -36,7 +36,7 @@ func TestResource_MustResourceNotExistsByGuid(t *testing.T) {
 func TestResource_CreateResource(t *testing.T) {
 	router := gin.Default()
 	router.POST(challenge.BaseRelativePath, func(context *gin.Context) {
-		challenge.CreateResource(context, &test_data.Challenge{}, test_data.ColumnNameChallengeName, nil)
+		challenge.CreateResource(context, &test_data.Challenge{}, test_data.ColumnNameChallengeName, nil, nil)
 	})
 	challenge.TestResourceCreateResource(
 		t, router,

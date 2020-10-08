@@ -39,13 +39,10 @@ github.com/remyoudompheng/bigfft v0.0.0-20170806203942-52369c62f446 h1:/NRJ5vAYo
 github.com/remyoudompheng/bigfft v0.0.0-20170806203942-52369c62f446/go.mod h1:uYEyJGbgTkfkS4+E/PavXkNJcbFIpEtjt2B0KDQ5+9M=
 github.com/sirupsen/logrus v1.6.0 h1:UBcNElsrwanuuMsnGSlYmtmgbb23qDR5dG+6X6Oo89I=
 github.com/sirupsen/logrus v1.6.0/go.mod h1:7uNnSEd1DgxDLC74fIahvMZmmYsHGZGEOFrfsX/uA88=
-github.com/ssst0n3/awesome_libs v0.2.5 h1:GHOyy+xY7ulQD/myMQwls4BqUjkPbwM0AD58akfRcy0=
-github.com/ssst0n3/awesome_libs v0.2.5/go.mod h1:jJEi5dnkun7fItPMYM6/oDj3GctcHjIjhIR1cj69Nfc=
-github.com/ssst0n3/lightweight_db v0.4.0 h1:dOomyBdfi8NDkpjWKzTr+cDbwjNbEdM2Sb++U4fxFzM=
-github.com/ssst0n3/lightweight_db v0.4.0/go.mod h1:lcxNHyJbcIXEex7HM/dtE/ffUSxKe1GgVtYr5dt5jn4=
-github.com/ssst0n3/lightweight_db v0.4.5 h1:BcvAXthUy1LJ/0AmsRVtIWI4dVtdph+mwuiDfXhp4No=
-github.com/ssst0n3/lightweight_db v0.4.6 h1:rqyCQg9S5XJ+HnFBOHHbnTMTmlkVzrB53iDkoydcsqc=
-github.com/ssst0n3/lightweight_db v0.4.6/go.mod h1:NN2RFJkS2mBnNZiFM8IzSsiSX+Chy53gCEy0Z4OFCn0=
+github.com/ssst0n3/awesome_libs v0.4.2 h1:kHS2poiOoT8lxNSuHKKev61s7qMRb83Rxaqnb2GLuTA=
+github.com/ssst0n3/awesome_libs v0.4.2/go.mod h1:2c7yWeIaTpUg7CDxI4wi1eMRUuisdUVSN3oPqeBPOkI=
+github.com/ssst0n3/lightweight_db v0.5.1 h1:zJenBiei8sJn2suHirP5X93HU2kheVia5JgRStw9l2M=
+github.com/ssst0n3/lightweight_db v0.5.1/go.mod h1:5x7gbCTNfPM0/xqaj+AQt98bAIgTRWQd7bnLotSrUUE=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
