@@ -4,10 +4,14 @@ import (
 	"encoding/json"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/awesome_reflect"
+	"github.com/ssst0n3/lightweight_db"
+	"github.com/ssst0n3/lightweight_db/example/sqlite"
 	"github.com/ssst0n3/lightweight_db/test/test_data"
 	"github.com/stretchr/testify/assert"
-	_ "modernc.org/sqlite"
+	//_ "modernc.org/sqlite"
+	"os"
 	"testing"
 )
 
@@ -20,7 +24,8 @@ var challenge = Resource{
 }
 
 func init() {
-	InitConnector("sqlite", "test/test_data/base.sqlite")
+	awesome_error.CheckFatal(os.Setenv(lightweight_db.EnvDbDsn, "test/test_data/base.sqlite"))
+	Conn = sqlite.Conn()
 }
 
 func TestResource_ListResource(t *testing.T) {

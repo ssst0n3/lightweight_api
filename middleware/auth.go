@@ -8,7 +8,10 @@ import (
 
 const PanicJwtSecretHasNotBeenInited = "JwtSecretHasNotBeenInited"
 
-var JwtSecret []byte
+var (
+	JwtSecret []byte
+	IsInitKey bool
+)
 
 func GenerateToken(userId uint, isAdmin bool, duration time.Duration) (string, error) {
 	nowTime := time.Now()

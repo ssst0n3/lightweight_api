@@ -15,6 +15,8 @@ github.com/go-playground/universal-translator v0.17.0 h1:icxd5fm+REJzpZx7ZfpaD87
 github.com/go-playground/universal-translator v0.17.0/go.mod h1:UkSxE5sNxxRwHyU+Scu5vgOQjsIJAF8j9muTVoKLVtA=
 github.com/go-playground/validator/v10 v10.2.0 h1:KgJ0snyC2R9VXYN2rneOtQcw5aHQB1Vv0sFl1UcHBOY=
 github.com/go-playground/validator/v10 v10.2.0/go.mod h1:uOYAAleCW8F/7oMFd6aG0GOhaH6EGOAJShg8Id5JGkI=
+github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
+github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/golang/protobuf v1.3.3 h1:gyjaxf+svBWX08ZjK86iN9geUJF0H6gp2IRKX6Nf6/I=
 github.com/golang/protobuf v1.3.3/go.mod h1:vzj43D7+SQXF/4pzW/hwtAqwc6iTitCiVSaWz5lYuqw=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
@@ -39,12 +41,12 @@ github.com/remyoudompheng/bigfft v0.0.0-20170806203942-52369c62f446 h1:/NRJ5vAYo
 github.com/remyoudompheng/bigfft v0.0.0-20170806203942-52369c62f446/go.mod h1:uYEyJGbgTkfkS4+E/PavXkNJcbFIpEtjt2B0KDQ5+9M=
 github.com/sirupsen/logrus v1.6.0 h1:UBcNElsrwanuuMsnGSlYmtmgbb23qDR5dG+6X6Oo89I=
 github.com/sirupsen/logrus v1.6.0/go.mod h1:7uNnSEd1DgxDLC74fIahvMZmmYsHGZGEOFrfsX/uA88=
-github.com/ssst0n3/awesome_libs v0.4.2 h1:kHS2poiOoT8lxNSuHKKev61s7qMRb83Rxaqnb2GLuTA=
-github.com/ssst0n3/awesome_libs v0.4.2/go.mod h1:2c7yWeIaTpUg7CDxI4wi1eMRUuisdUVSN3oPqeBPOkI=
-github.com/ssst0n3/awesome_libs v0.4.3 h1:gW2G2l8ABC40mZ0oEEZFOBYVq8r6U0ypyyEDg0PTBAk=
-github.com/ssst0n3/awesome_libs v0.4.3/go.mod h1:2c7yWeIaTpUg7CDxI4wi1eMRUuisdUVSN3oPqeBPOkI=
-github.com/ssst0n3/lightweight_db v0.5.3 h1:HsyxcXr03SCDe3ydhJoR6IGcvHp3pe/hkzq/nyT2CiA=
-github.com/ssst0n3/lightweight_db v0.5.3/go.mod h1:4az3UIFAqEr/6wZ0Q2O5Ex0hYBH4e0d7OHO5vNpVk5I=
+github.com/ssst0n3/awesome_libs v0.4.4 h1:ifhAExGeB7So09K8pilPIOhsdGsKK4fea0XAwf8W3e8=
+github.com/ssst0n3/awesome_libs v0.4.4/go.mod h1:2c7yWeIaTpUg7CDxI4wi1eMRUuisdUVSN3oPqeBPOkI=
+github.com/ssst0n3/lightweight_db v0.5.6 h1:jCAi7riZg+7hXXqxLXlwB+h6O1TL68bx1HGXzwYceP4=
+github.com/ssst0n3/lightweight_db v0.5.6/go.mod h1:r4sibRUi4DfJxMv6oYcZSts1atdNYi5qx466Tf8+qPM=
+github.com/ssst0n3/lightweight_db v0.5.7 h1:qxMDUgtYIlladZ9eo9EDNRlQNaXCgIbPGX+1flcX6Y8=
+github.com/ssst0n3/lightweight_db v0.5.7/go.mod h1:udapXkHkdaO2IyYhF2RtNcdk21Ju+VqfCkOFNJLadM8=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
