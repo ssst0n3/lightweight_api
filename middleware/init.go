@@ -13,15 +13,15 @@ const (
 	HintInitData   = "Hint: you need init your data, because the JwtSecret is init key."
 )
 
-func InitJwtKey()  {
-	var err error
-	JwtSecret, IsInitKey, err = secret.LoadKey(FilenameJwtKey)
-	awesome_error.CheckFatal(err)
-	log.Logger.Debug(HintInitData)
+func InitJwtKey() {
+	if len(os.Getenv(consts.EnvDirSecret)) > 0 {
+		var err error
+		JwtSecret, IsInitKey, err = secret.LoadKey(FilenameJwtKey)
+		awesome_error.CheckFatal(err)
+		log.Logger.Debug(HintInitData)
+	}
 }
 
 func init() {
-	if len(os.Getenv(consts.EnvDirSecret)) > 0 {
-		InitJwtKey()
-	}
+	InitJwtKey()
 }
