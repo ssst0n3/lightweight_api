@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/awesome_reflect"
+	"github.com/ssst0n3/awesome_libs/secret/consts"
 	"github.com/ssst0n3/lightweight_db"
 	"github.com/ssst0n3/lightweight_db/example/sqlite"
 	"github.com/ssst0n3/lightweight_db/test/test_data"
@@ -24,6 +25,7 @@ var challenge = Resource{
 }
 
 func init() {
+	awesome_error.CheckFatal(os.Setenv(consts.EnvDirSecret, "/tmp/secret"))
 	awesome_error.CheckFatal(os.Setenv(lightweight_db.EnvDbDsn, "test/test_data/base.sqlite"))
 	Conn = sqlite.Conn()
 }
