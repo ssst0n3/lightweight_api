@@ -15,6 +15,7 @@ const (
 
 func InitJwtKey() {
 	if len(os.Getenv(consts.EnvDirSecret)) > 0 {
+		secret.InitDirSecret()
 		var err error
 		JwtSecret, IsInitKey, err = secret.LoadKey(FilenameJwtKey)
 		awesome_error.CheckFatal(err)
