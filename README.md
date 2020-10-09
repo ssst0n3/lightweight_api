@@ -1,5 +1,6 @@
 ## Database Connector
-lightweight_api will auto create Connector if you set environment variable DB_DRIVER_NAME equal to "mysql" or "sqlite".
+lightweight_api will auto create Connector if you set environment variable DB_DRIVER_NAME equal to "mysql" or "sqlite", 
+But it not works in testcase if you setenv after lightweight_api/conn.go/init(), so maybe you need execute `lightweight_api.InitConnector()` 
 
 If you want to use a sql driver other than mysql or sqlite, you can init Connector by yourself.
 
