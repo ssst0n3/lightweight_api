@@ -1,4 +1,4 @@
-package auth
+package user
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,10 +6,11 @@ import (
 )
 
 func InitRouter(router *gin.Engine) {
-	anonymous := router.Group(Resource.BaseRelativePath)
 	admin := router.Group(Resource.BaseRelativePath, middleware.JwtAdmin())
 	{
-		anonymous.POST("", Login)
-		admin.GET("", func(context *gin.Context) {})
+		admin.GET("", List)
+		admin.POST("", Create)
+		admin.PUT("/:id/basic", UpdateBasic)
+		admin.PUT("/:id/password", UpdatePassword)
 	}
 }

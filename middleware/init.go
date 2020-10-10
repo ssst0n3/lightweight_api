@@ -18,7 +18,9 @@ func InitJwtKey() {
 	var err error
 	JwtSecret, IsInitKey, err = secret.LoadKey(FilenameJwtKey)
 	awesome_error.CheckFatal(err)
-	log.Logger.Debug(HintInitData)
+	if IsInitKey {
+		log.Logger.Debug(HintInitData)
+	}
 }
 
 func init() {
