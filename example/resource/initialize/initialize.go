@@ -6,7 +6,6 @@ import (
 	"github.com/ssst0n3/awesome_libs/secret/consts"
 	"github.com/ssst0n3/lightweight_api"
 	"github.com/ssst0n3/lightweight_api/example/resource/user"
-	"github.com/ssst0n3/lightweight_api/middleware"
 	"net/http"
 	"os"
 )
@@ -29,8 +28,12 @@ func init() {
 	}
 }
 
+func IsInitialize(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"success": true, "initialize": cipher.IsInitKey})
+}
+
 func CreateUser(c *gin.Context) {
-	if middleware.IsInitKey {
+	if cipher.IsInitKey {
 		user.Create(c)
 	} else {
 		c.JSON(http.StatusOK, gin.H{
@@ -41,6 +44,6 @@ func CreateUser(c *gin.Context) {
 }
 
 func End(c *gin.Context) {
-	middleware.IsInitKey = false
+	cipher.IsInitKey = false
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
