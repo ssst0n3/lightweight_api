@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs/awesome_reflect"
 	"net/http"
+	"reflect"
 )
 
 type Resource struct {
@@ -62,7 +63,8 @@ func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject
 			return
 		}
 	}
-	Response200CreateSuccess(c, uint(id), fmt.Sprintf(MsgResourceCreateSuccess, r.Name, r.GuidFieldJsonTag))
+	guidValue, _ := awesome_reflect.FieldByJsonTag(reflect.ValueOf(modelPtr).Elem(), r.GuidFieldJsonTag)
+	Response200CreateSuccess(c, uint(id), fmt.Sprintf(MsgResourceCreateSuccess, r.Name, guidValue))
 }
 
 func (r *Resource) CreateResource(c *gin.Context) {
