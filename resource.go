@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs/awesome_reflect"
+	"github.com/ssst0n3/lightweight_api/response"
 	"net/http"
 	"reflect"
 )
@@ -64,7 +65,7 @@ func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject
 		}
 	}
 	guidValue, _ := awesome_reflect.FieldByJsonTag(reflect.ValueOf(modelPtr).Elem(), r.GuidFieldJsonTag)
-	Response200CreateSuccess(c, uint(id), fmt.Sprintf(MsgResourceCreateSuccess, r.Name, guidValue))
+	response.CreateSuccess200(c, uint(id), fmt.Sprintf(MsgResourceCreateSuccess, r.Name, guidValue))
 }
 
 func (r *Resource) CreateResource(c *gin.Context) {
@@ -80,7 +81,7 @@ func (r *Resource) DeleteResource(c *gin.Context) {
 	if err := Conn.DeleteObjectById(r.TableName, id); err != nil {
 		HandleInternalServerError(c, err)
 	} else {
-		Response200DeleteSuccess(c)
+		response.DeleteSuccess200(c)
 	}
 }
 
