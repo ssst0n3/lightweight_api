@@ -14,3 +14,7 @@ const (
 	GuidFieldMustNotExists = "guidField %s must not exists"
 	FieldCannotFind = "cannot find field: %s"
 )
+
+const (
+	MsgResourceCreateSuccess = "%s %s create success"
+)
