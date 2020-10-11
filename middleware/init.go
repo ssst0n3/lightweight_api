@@ -14,7 +14,7 @@ const (
 )
 
 func InitJwtKey() {
-	if len(JwtSecret) > 0 {
+	if len(JwtSecret) == 0 {
 		log.Logger.Info()
 		secret.InitDirSecret()
 		var err error
