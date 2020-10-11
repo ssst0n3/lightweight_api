@@ -43,8 +43,8 @@ github.com/sirupsen/logrus v1.6.0 h1:UBcNElsrwanuuMsnGSlYmtmgbb23qDR5dG+6X6Oo89I
 github.com/sirupsen/logrus v1.6.0/go.mod h1:7uNnSEd1DgxDLC74fIahvMZmmYsHGZGEOFrfsX/uA88=
 github.com/ssst0n3/awesome_libs v0.4.4 h1:ifhAExGeB7So09K8pilPIOhsdGsKK4fea0XAwf8W3e8=
 github.com/ssst0n3/awesome_libs v0.4.4/go.mod h1:2c7yWeIaTpUg7CDxI4wi1eMRUuisdUVSN3oPqeBPOkI=
-github.com/ssst0n3/awesome_libs v0.4.7 h1:ncDR5R6VC71dvJMZAgM69viufWh8nm7fSdP0eE4OsIQ=
-github.com/ssst0n3/awesome_libs v0.4.7/go.mod h1:2c7yWeIaTpUg7CDxI4wi1eMRUuisdUVSN3oPqeBPOkI=
+github.com/ssst0n3/awesome_libs v0.4.8 h1:wrSR9FjRXJGpKj/BsceyVYWCVrC/jzo5sjlC7vuNQ3E=
+github.com/ssst0n3/awesome_libs v0.4.8/go.mod h1:2c7yWeIaTpUg7CDxI4wi1eMRUuisdUVSN3oPqeBPOkI=
 github.com/ssst0n3/lightweight_db v0.5.7 h1:qxMDUgtYIlladZ9eo9EDNRlQNaXCgIbPGX+1flcX6Y8=
 github.com/ssst0n3/lightweight_db v0.5.7/go.mod h1:udapXkHkdaO2IyYhF2RtNcdk21Ju+VqfCkOFNJLadM8=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

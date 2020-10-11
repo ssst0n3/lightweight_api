@@ -20,7 +20,7 @@ var Resource = lightweight_api.Resource{
 
 func Init() {
 	lightweight_api.Logger.Info("start init.")
-	cipher.InitCipher()
+	cipher.Init()
 }
 
 func init() {
