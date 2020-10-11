@@ -3,11 +3,9 @@ package initialize
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs/cipher"
-	"github.com/ssst0n3/awesome_libs/secret/consts"
 	"github.com/ssst0n3/lightweight_api"
 	"github.com/ssst0n3/lightweight_api/example/resource/user"
 	"net/http"
-	"os"
 )
 
 const (
@@ -16,17 +14,6 @@ const (
 
 var Resource = lightweight_api.Resource{
 	BaseRelativePath: "/api/v1/initialize",
-}
-
-func Init() {
-	lightweight_api.Logger.Info("start init.")
-	cipher.Init()
-}
-
-func init() {
-	if len(os.Getenv(consts.EnvDirSecret)) > 0 {
-		Init()
-	}
 }
 
 func IsInitialize(c *gin.Context) {

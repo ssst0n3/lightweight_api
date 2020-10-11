@@ -14,12 +14,15 @@ const (
 )
 
 func InitJwtKey() {
-	secret.InitDirSecret()
-	var err error
-	JwtSecret, IsInitKey, err = secret.LoadKey(FilenameJwtKey)
-	awesome_error.CheckFatal(err)
-	if IsInitKey {
-		log.Logger.Debug(HintInitData)
+	if len(JwtSecret) > 0 {
+		log.Logger.Info()
+		secret.InitDirSecret()
+		var err error
+		JwtSecret, IsInitKey, err = secret.LoadKey(FilenameJwtKey)
+		awesome_error.CheckFatal(err)
+		if IsInitKey {
+			log.Logger.Debug(HintInitData)
+		}
 	}
 }
 
