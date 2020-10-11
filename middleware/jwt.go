@@ -26,7 +26,7 @@ func JwtAdmin() gin.HandlerFunc {
 			token, err := GetToken(c)
 			if err != nil {
 				awesome_error.CheckErr(err)
-				response.Unauthorized401(c, "none token")
+				response.Unauthorized401(c, "none token.")
 				return
 			}
 
@@ -37,7 +37,7 @@ func JwtAdmin() gin.HandlerFunc {
 				return
 			}
 			if !claims.IsAdmin {
-				response.Unauthorized401(c, "you are not admin")
+				response.Unauthorized401(c, "you are not admin.")
 				return
 			}
 		}
@@ -50,7 +50,7 @@ func JwtUser() gin.HandlerFunc {
 		if !CloseJwt {
 			token, err := c.Cookie("token")
 			if err != nil {
-				response.Unauthorized401(c, "none token")
+				response.Unauthorized401(c, "none token.")
 				return
 			}
 
