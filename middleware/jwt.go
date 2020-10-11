@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
-	"net/http"
+	"github.com/ssst0n3/lightweight_api"
 )
 
 var CloseJwt = false
@@ -26,27 +26,18 @@ func JwtAdmin() gin.HandlerFunc {
 			token, err := GetToken(c)
 			if err != nil {
 				awesome_error.CheckErr(err)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-					"auth":   false,
-					"reason": "none token",
-				})
+				lightweight_api.Response401Unauthorized(c, "none token")
 				return
 			}
 
 			claims, err := ParseToken(token)
 			if err != nil {
 				awesome_error.CheckErr(err)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-					"auth":   false,
-					"reason": err.Error(),
-				})
+				lightweight_api.Response401Unauthorized(c, err.Error())
 				return
 			}
 			if !claims.IsAdmin {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-					"auth":   false,
-					"reason": "you are not admin",
-				})
+				lightweight_api.Response401Unauthorized(c, "you are not admin")
 				return
 			}
 		}
@@ -59,20 +50,14 @@ func JwtUser() gin.HandlerFunc {
 		if !CloseJwt {
 			token, err := c.Cookie("token")
 			if err != nil {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-					"auth":   false,
-					"reason": "none token",
-				})
+				lightweight_api.Response401Unauthorized(c, "none token")
 				return
 			}
 
 			_, err = ParseToken(token)
 			if err != nil {
 				awesome_error.CheckErr(err)
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-					"auth":   false,
-					"reason": err.Error(),
-				})
+				lightweight_api.Response401Unauthorized(c, err.Error())
 				return
 			}
 		}

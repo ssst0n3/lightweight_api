@@ -33,6 +33,14 @@ func Response400BadRequest(c *gin.Context, reason string)  {
 	ResponseError(c, http.StatusBadRequest, reason)
 }
 
+func Response401Unauthorized(c *gin.Context, reason string)  {
+	c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+		"success": false,
+		"auth":   false,
+		"reason": reason,
+	})
+}
+
 func Response200UpdateSuccess(c *gin.Context) {
 	Response200Success(c, "update success")
 }
