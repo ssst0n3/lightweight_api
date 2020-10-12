@@ -16,5 +16,5 @@ const (
 )
 
 const (
-	MsgResourceCreateSuccess = "%s %s create success"
+	MsgResourceCreateSuccess = "%s %v create success"
 )
