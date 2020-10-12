@@ -64,8 +64,14 @@ func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject
 			return
 		}
 	}
-	guidValue, _ := awesome_reflect.FieldByJsonTag(reflect.ValueOf(modelPtr).Elem(), r.GuidFieldJsonTag)
-	response.CreateSuccess200(c, uint(id), fmt.Sprintf(MsgResourceCreateSuccess, r.Name, guidValue))
+	var msg string
+	if len(r.GuidFieldJsonTag)>0 {
+		guidValue, _ := awesome_reflect.FieldByJsonTag(reflect.ValueOf(modelPtr).Elem(), r.GuidFieldJsonTag)
+		msg = fmt.Sprintf(MsgResourceCreateSuccess, r.Name, guidValue)
+	} else {
+		msg = fmt.Sprintf(MsgResourceCreateSuccess, r.Name, id)
+	}
+	response.CreateSuccess200(c, uint(id), fmt.Sprintf(MsgResourceCreateSuccess, r.Name, msg))
 }
 
 func (r *Resource) CreateResource(c *gin.Context) {
