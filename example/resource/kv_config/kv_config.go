@@ -31,12 +31,13 @@ func Get(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	var result lightweight_db.Config
-	if err := lightweight_api.Conn.OrmShowObjectByGuidUsingReflectBind(Resource.TableName, lightweight_db.ColumnNameConfigKey, key, &result); err != nil {
+
+	value, err := lightweight_api.Conn.KVGetValueByKey(Resource.TableName, lightweight_db.ColumnNameConfigValue, lightweight_db.ColumnNameConfigKey, key)
+	if err != nil {
 		lightweight_api.HandleInternalServerError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, value)
 }
 
 func Delete(c *gin.Context) {
@@ -51,7 +52,7 @@ func Delete(c *gin.Context) {
 	response.DeleteSuccess200(c)
 }
 
-func Update(c *gin.Context)  {
+func Update(c *gin.Context) {
 	key, err := Key(c)
 	if err != nil {
 		return
