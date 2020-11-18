@@ -7,6 +7,6 @@ func InitRouter(router *gin.Engine) {
 	{
 		anonymous.POST("/create_user", CreateUser)
 		anonymous.POST("/end", End)
-		anonymous.GET("", IsInitialize)
+		anonymous.GET("", ShouldInitialize)
 	}
 }
