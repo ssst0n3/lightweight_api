@@ -2,6 +2,7 @@ package kv_config
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/lightweight_api"
 	"github.com/ssst0n3/lightweight_api/response"
 	"github.com/ssst0n3/lightweight_db"
@@ -26,13 +27,19 @@ func Key(c *gin.Context) (key string, err error) {
 	return
 }
 
+func GetValueByKey(key string) (value string, err error) {
+	value, err = lightweight_api.Conn.KVGetValueByKey(Resource.TableName, lightweight_db.ColumnNameConfigValue, lightweight_db.ColumnNameConfigKey, key)
+	awesome_error.CheckErr(err)
+	return
+}
+
 func Get(c *gin.Context) {
 	key, err := Key(c)
 	if err != nil {
 		return
 	}
 
-	value, err := lightweight_api.Conn.KVGetValueByKey(Resource.TableName, lightweight_db.ColumnNameConfigValue, lightweight_db.ColumnNameConfigKey, key)
+	value, err := GetValueByKey(key)
 	if err != nil {
 		lightweight_api.HandleInternalServerError(c, err)
 		return
