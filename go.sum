@@ -45,8 +45,8 @@ github.com/sirupsen/logrus v1.7.0/go.mod h1:yWOB1SBYBC5VeMP7gHvWumXLIWorT60ONWic
 github.com/ssst0n3/awesome_libs v0.4.5/go.mod h1:2c7yWeIaTpUg7CDxI4wi1eMRUuisdUVSN3oPqeBPOkI=
 github.com/ssst0n3/awesome_libs v0.5.6 h1:/kY6OENZPNxb2ybYHmx1Csoo+U67xIG8MkUH+gbqcZ8=
 github.com/ssst0n3/awesome_libs v0.5.6/go.mod h1:VFJ6M4jkhqgjYTjKaiEbo/Bk3ZvPaZh5BRvm24NvLno=
-github.com/ssst0n3/lightweight_db v0.6.7 h1:n7KtjKxydiyeIlUYvWNw9bwXLl++qEyqLYNPHa9ETHE=
-github.com/ssst0n3/lightweight_db v0.6.7/go.mod h1:j1vDMChfH2IeMT4Ru4lBPPvbmeSTAdsn084SfJMFEqw=
+github.com/ssst0n3/lightweight_db v0.6.8 h1:QXYj5YM/Eq7seebvsTyBBKHfXw2IYUIX8RwGb9R9erQ=
+github.com/ssst0n3/lightweight_db v0.6.8/go.mod h1:j1vDMChfH2IeMT4Ru4lBPPvbmeSTAdsn084SfJMFEqw=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
