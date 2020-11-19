@@ -44,7 +44,7 @@ func Get(c *gin.Context) {
 		lightweight_api.HandleInternalServerError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, value)
+	c.String(http.StatusOK, value)
 }
 
 func Delete(c *gin.Context) {
