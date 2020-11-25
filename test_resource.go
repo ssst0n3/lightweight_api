@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/ssst0n3/lightweight_api/response"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
@@ -59,10 +60,10 @@ func (r *Resource) TestResourceMustResourceNotExistsByGuid(t *testing.T, resourc
 		err = r.MustResourceNotExistsByGuid(c, guidColName, guidValue)
 		assert.Error(t, err)
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		expect, err := json.Marshal(gin.H{
-			"success": false,
+		expect, err := json.Marshal(response.Base{
+			Success: false,
 			//"reason":  fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue),
-			"reason": fmt.Sprintf(GuidFieldMustNotExists, guidColName),
+			Message: fmt.Sprintf(GuidFieldMustNotExists, guidColName),
 		})
 		assert.NoError(t, err)
 		assert.Equal(t, string(expect), w.Body.String())
@@ -86,9 +87,9 @@ func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, 
 		req, _ := http.NewRequest(http.MethodPost, r.BaseRelativePath, reader)
 		w := ObjectOperate(req, router)
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		expectBytes, err := json.Marshal(gin.H{
-			"success": false,
-			"reason":  fmt.Sprintf(GuidFieldMustNotExists, guidColName),
+		expectBytes, err := json.Marshal(response.Base{
+			Success: false,
+			Message: fmt.Sprintf(GuidFieldMustNotExists, guidColName),
 		})
 		assert.NoError(t, err)
 		assert.Contains(t, string(expectBytes), w.Body.String())
