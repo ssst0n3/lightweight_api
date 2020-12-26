@@ -71,7 +71,9 @@ func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject
 	} else {
 		msg = fmt.Sprintf(MsgResourceCreateSuccess, r.Name, id)
 	}
-	response.CreateSuccess200(c, uint(id), msg)
+	if !c.IsAborted() {
+		response.CreateSuccess200(c, uint(id), msg)
+	}
 }
 
 func (r *Resource) CreateResource(c *gin.Context) {
