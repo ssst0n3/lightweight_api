@@ -7,6 +7,7 @@ import (
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/awesome_reflect"
 	"github.com/ssst0n3/awesome_libs/secret/consts"
+	test_data2 "github.com/ssst0n3/lightweight_api/test/test_data"
 	"github.com/ssst0n3/lightweight_db"
 	"github.com/ssst0n3/lightweight_db/example/sqlite"
 	"github.com/ssst0n3/lightweight_db/test/test_data"
@@ -28,6 +29,7 @@ func init() {
 	awesome_error.CheckFatal(os.Setenv(consts.EnvDirSecret, "/tmp/secret"))
 	awesome_error.CheckFatal(os.Setenv(lightweight_db.EnvDbDsn, "test/test_data/base.sqlite"))
 	Conn = sqlite.Conn()
+	test_data2.CreateTables(Conn)
 }
 
 func TestResource_ListResource(t *testing.T) {
