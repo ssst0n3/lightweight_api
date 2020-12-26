@@ -63,7 +63,7 @@ func List(c *gin.Context) {
 func Create(c *gin.Context) {
 	Resource.CreateResourceTemplate(c, func(modelPtr interface{}) (err error) {
 		u := modelPtr.(*Model)
-		u.Password, err = cipher.CommonCipher.Encrypt(u.Password)
+		u.Password, err = cipher.CommonCipher.Encrypt([]byte(u.Password))
 		return
 	}, nil)
 }
@@ -75,7 +75,7 @@ func UpdateBasic(c *gin.Context) {
 func UpdatePassword(c *gin.Context) {
 	Resource.UpdateResourceTemplate(c, UpdatePasswordBody{}, func(modelPtr interface{}) (err error) {
 		u := modelPtr.(*Model)
-		u.Password, err = cipher.CommonCipher.Encrypt(u.Password)
+		u.Password, err = cipher.CommonCipher.Encrypt([]byte(u.Password))
 		return
 	})
 }
