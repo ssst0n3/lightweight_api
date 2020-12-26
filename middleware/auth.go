@@ -45,7 +45,7 @@ func CheckPassword(inputPassword string, password string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	return inputPassword == passwordDecrypted, nil
+	return inputPassword == string(passwordDecrypted), nil
 }
 
 func ParseToken(token string) (*Claims, error) {
