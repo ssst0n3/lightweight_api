@@ -17,6 +17,14 @@ type Resource struct {
 	GuidFieldJsonTag string
 }
 
+func BaseRelativePath(apiVersion, resourceName string) string {
+	return fmt.Sprintf("/api/%s/%s", apiVersion, resourceName)
+}
+
+func BaseRelativePathV1(resourceName string) string {
+	return BaseRelativePath("v1", resourceName)
+}
+
 func (r *Resource) ListResource(c *gin.Context) {
 	objects, err := Conn.ListAllPropertiesByTableName(r.TableName)
 	if err != nil {
@@ -65,7 +73,7 @@ func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject
 		}
 	}
 	var msg string
-	if len(r.GuidFieldJsonTag)>0 {
+	if len(r.GuidFieldJsonTag) > 0 {
 		guidValue, _ := awesome_reflect.FieldByJsonTag(reflect.ValueOf(modelPtr).Elem(), r.GuidFieldJsonTag)
 		msg = fmt.Sprintf(MsgResourceCreateSuccess, r.Name, guidValue)
 	} else {
