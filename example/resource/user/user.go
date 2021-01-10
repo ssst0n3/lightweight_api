@@ -60,10 +60,32 @@ func Create(c *gin.Context) {
 	}, nil)
 }
 
+// UpdateBasic godoc
+// @Summary update basic
+// @Description update some basic information of user
+// @Tags User
+// @ID update-basic
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param user_update_basic_body body UpdateBasicBody true "Update user's basic information"
+// @Success 200 {model} response.UpdateSuccess200
+// @Router /api/v1/user/{id}/basic [put]
 func UpdateBasic(c *gin.Context) {
 	Resource.UpdateResourceTemplate(c, UpdateBasicBody{}, nil)
 }
 
+// UpdatePassword godoc
+// @Summary update password
+// @Description update user's password
+// @Tags User
+// @ID update-password
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param user_update_password_body body UpdatePasswordBody true "Update user's password"
+// @Success 200 {model} response.UpdateSuccess200
+// @Router /api/v1/user/{id}/password [put]
 func UpdatePassword(c *gin.Context) {
 	Resource.UpdateResourceTemplate(c, UpdatePasswordBody{}, func(modelPtr interface{}) (err error) {
 		u := modelPtr.(*Model)

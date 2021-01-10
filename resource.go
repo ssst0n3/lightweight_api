@@ -133,9 +133,7 @@ func (r *Resource) UpdateResourceTemplate(c *gin.Context, model interface{}, tas
 		HandleInternalServerError(c, err)
 		return
 	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"success": true,
-		})
+		response.UpdateSuccess200(c)
 		return
 	}
 }
