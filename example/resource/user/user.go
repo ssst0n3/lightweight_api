@@ -20,33 +20,15 @@ var Resource = lightweight_api.Resource{
 	GuidFieldJsonTag: "username",
 }
 
-type UpdateBasicBody struct {
-	Username string `json:"username"`
-	IsAdmin  bool   `json:"is_admin"`
-}
-
-/*
-need encrypt
-*/
-type UpdatePasswordBody struct {
-	Password string `json:"password"`
-}
-
-type Model struct {
-	UpdateBasicBody
-	UpdatePasswordBody
-}
-
-type ModelWithId struct {
-	Id uint `json:"id"`
-	Model
-}
-
-const (
-	ColumnNameUsername = "username"
-	ColumnNameIsAdmin  = "is_admin"
-)
-
+// List godoc
+// @Summary list user
+// @Description return users
+// @Tags Repository
+// @ID list-user
+// @Accept json
+// @Produce json
+// @Success 200 {array} ListUserBody
+// @Router /api/v1/user [get]
 func List(c *gin.Context) {
 	query := awesome_libs.Format("SELECT id, {.username}, {.is_admin}", awesome_libs.Dict{
 		"username": ColumnNameUsername,
