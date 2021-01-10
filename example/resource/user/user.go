@@ -5,6 +5,7 @@ import (
 	"github.com/ssst0n3/awesome_libs"
 	"github.com/ssst0n3/awesome_libs/cipher"
 	"github.com/ssst0n3/lightweight_api"
+	_ "github.com/ssst0n3/lightweight_api/response" // for swaggo
 	"net/http"
 )
 
@@ -23,7 +24,7 @@ var Resource = lightweight_api.Resource{
 // List godoc
 // @Summary list user
 // @Description return users
-// @Tags Repository
+// @Tags User
 // @ID list-user
 // @Accept json
 // @Produce json
@@ -42,6 +43,15 @@ func List(c *gin.Context) {
 	}
 }
 
+// Create godoc
+// @Summary create user
+// @Description Add a user
+// @Tags User
+// @ID create-user
+// @Accept json
+// @Produce json
+// @Success 200 {model} response.CreateSuccess
+// @Router /api/v1/user [post]
 func Create(c *gin.Context) {
 	Resource.CreateResourceTemplate(c, func(modelPtr interface{}) (err error) {
 		u := modelPtr.(*Model)
