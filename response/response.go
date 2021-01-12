@@ -23,9 +23,11 @@ func CreateSuccess200(c *gin.Context, id uint, msg string) {
 }
 
 func Error(c *gin.Context, statusCode int, reason string) {
-	c.JSON(statusCode, Base{
-		Success: false,
-		Message: reason,
+	c.JSON(statusCode, Err{
+		Base: Base{
+			Success: false,
+		},
+		Reason: reason,
 	})
 }
 

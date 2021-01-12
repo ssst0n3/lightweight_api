@@ -5,6 +5,11 @@ type Base struct {
 	Message string `json:"message"`
 }
 
+type Err struct {
+	Base
+	Reason string `json:"reason"`
+}
+
 type CreateSuccess struct {
 	Base
 	Id uint `json:"id"`
