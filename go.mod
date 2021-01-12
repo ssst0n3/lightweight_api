@@ -9,6 +9,6 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.7.0
 	github.com/ssst0n3/awesome_libs v0.5.7
-	github.com/ssst0n3/lightweight_db v0.7.1
+	github.com/ssst0n3/lightweight_db v0.7.3
 	github.com/stretchr/testify v1.6.1
 )

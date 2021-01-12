@@ -2,7 +2,7 @@ package response
 
 type Base struct {
 	Success bool   `json:"success"`
-	Message string `json:"message"`
+	Msg     string `json:"msg"`
 }
 
 type Err struct {

@@ -47,6 +47,8 @@ github.com/ssst0n3/awesome_libs v0.5.7 h1:G9rHX//9PEqMn6wOrnqOxiRjgtXkeOMZPCAb14
 github.com/ssst0n3/awesome_libs v0.5.7/go.mod h1:VFJ6M4jkhqgjYTjKaiEbo/Bk3ZvPaZh5BRvm24NvLno=
 github.com/ssst0n3/lightweight_db v0.6.9 h1:LDqxPxlz7oMTT8rBNc2qQLAaE7gvF/Fx8siQ6dVGx1k=
 github.com/ssst0n3/lightweight_db v0.6.9/go.mod h1:j1vDMChfH2IeMT4Ru4lBPPvbmeSTAdsn084SfJMFEqw=
+github.com/ssst0n3/lightweight_db v0.7.3 h1:2V8FbpgYu2rlUzX/hhFWLAxGuNHuLwQWr1lwrJqXRzU=
+github.com/ssst0n3/lightweight_db v0.7.3/go.mod h1:j1vDMChfH2IeMT4Ru4lBPPvbmeSTAdsn084SfJMFEqw=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=

@@ -8,7 +8,7 @@ import (
 func Success200(c *gin.Context, msg string) {
 	c.JSON(http.StatusOK, Base{
 		Success: true,
-		Message: msg,
+		Msg:     msg,
 	})
 }
 
@@ -16,7 +16,7 @@ func CreateSuccess200(c *gin.Context, id uint, msg string) {
 	c.JSON(http.StatusOK, CreateSuccess{
 		Base: Base{
 			Success: true,
-			Message: msg,
+			Msg:     msg,
 		},
 		Id: id,
 	})
@@ -44,7 +44,7 @@ func Unauthorized401(c *gin.Context, reason string) {
 		Auth{
 			Base: Base{
 				Success: false,
-				Message: reason,
+				Msg:     reason,
 			},
 			Auth: false,
 		},

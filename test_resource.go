@@ -60,10 +60,12 @@ func (r *Resource) TestResourceMustResourceNotExistsByGuid(t *testing.T, resourc
 		err = r.MustResourceNotExistsByGuid(c, guidColName, guidValue)
 		assert.Error(t, err)
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		expect, err := json.Marshal(response.Base{
-			Success: false,
+		expect, err := json.Marshal(response.Err{
+			Base: response.Base{
+				Success: false,
+			},
 			//"reason":  fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue),
-			Message: fmt.Sprintf(GuidFieldMustNotExists, guidColName),
+			Reason: fmt.Sprintf(GuidFieldMustNotExists, guidColName),
 		})
 		assert.NoError(t, err)
 		assert.Equal(t, string(expect), w.Body.String())
@@ -87,9 +89,11 @@ func (r *Resource) TestResourceCreateResource(t *testing.T, router *gin.Engine, 
 		req, _ := http.NewRequest(http.MethodPost, r.BaseRelativePath, reader)
 		w := ObjectOperate(req, router)
 		assert.Equal(t, http.StatusBadRequest, w.Code)
-		expectBytes, err := json.Marshal(response.Base{
-			Success: false,
-			Message: fmt.Sprintf(GuidFieldMustNotExists, guidColName),
+		expectBytes, err := json.Marshal(response.Err{
+			Base: response.Base{
+				Success: false,
+			},
+			Reason:     fmt.Sprintf(GuidFieldMustNotExists, guidColName),
 		})
 		assert.NoError(t, err)
 		assert.Contains(t, string(expectBytes), w.Body.String())
