@@ -17,6 +17,16 @@ type Resource struct {
 	GuidFieldJsonTag string
 }
 
+func NewResource(resourceName string, model interface{}, guidFiledJsonTag string) Resource {
+	return Resource{
+		Name:             resourceName,
+		TableName:        resourceName,
+		BaseRelativePath: BaseRelativePathV1(resourceName),
+		Model:            model,
+		GuidFieldJsonTag: guidFiledJsonTag,
+	}
+}
+
 func BaseRelativePath(apiVersion, resourceName string) string {
 	return fmt.Sprintf("/api/%s/%s", apiVersion, resourceName)
 }

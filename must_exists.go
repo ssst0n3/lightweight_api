@@ -6,6 +6,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func (r Resource) MustResourceExistsGetModelByIdAutoParseParam(c *gin.Context) (id int64, model interface{}, err error) {
+	id, err = r.MustResourceExistsByIdAutoParseParam(c)
+	if err != nil {
+		return
+	}
+	model, err = Conn.OrmShowObjectByIdUsingReflectRet(r.TableName, id, r.Model)
+	if err != nil {
+		HandleInternalServerError(c, err)
+		return
+	}
+	return
+}
+
 func (r *Resource) MustResourceExistsByIdAutoParseParam(c *gin.Context) (int64, error) {
 	exists, id, err := r.CheckResourceExistsByIdAutoParseParam(c)
 	if err != nil {

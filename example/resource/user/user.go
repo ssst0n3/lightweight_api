@@ -13,13 +13,15 @@ const (
 	ResourceName = "user"
 )
 
-var Resource = lightweight_api.Resource{
-	Name:             ResourceName,
-	TableName:        ResourceName,
-	BaseRelativePath: "/api/v1/" + ResourceName,
-	Model:            Model{},
-	GuidFieldJsonTag: "username",
-}
+//var Resource = lightweight_api.Resource{
+//	Name:             ResourceName,
+//	TableName:        ResourceName,
+//	BaseRelativePath: lightweight_api.BaseRelativePathV1(ResourceName),
+//	Model:            Model{},
+//	GuidFieldJsonTag: "username",
+//}
+
+var Resource = lightweight_api.NewResource(ResourceName, Model{}, ColumnNameUsername)
 
 // List godoc
 // @Summary list user

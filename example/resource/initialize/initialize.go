@@ -14,7 +14,7 @@ const (
 )
 
 var Resource = lightweight_api.Resource{
-	BaseRelativePath: "/api/v1/initialize",
+	BaseRelativePath: lightweight_api.BaseRelativePathV1("initialize"),
 }
 
 var (

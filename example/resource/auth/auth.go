@@ -11,7 +11,7 @@ import (
 )
 
 var Resource = lightweight_api.Resource{
-	BaseRelativePath: "/api/v1/auth",
+	BaseRelativePath: lightweight_api.BaseRelativePathV1("auth"),
 }
 
 func Login(c *gin.Context) {

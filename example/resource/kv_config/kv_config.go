@@ -16,7 +16,7 @@ const (
 var Resource = lightweight_api.Resource{
 	Name:             ResourceName,
 	TableName:        ResourceName,
-	BaseRelativePath: "/api/v1/" + ResourceName,
+	BaseRelativePath: lightweight_api.BaseRelativePathV1(ResourceName),
 	Model:            lightweight_db.Config{},
 	GuidFieldJsonTag: lightweight_db.ColumnNameConfigKey,
 }
