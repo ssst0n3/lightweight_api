@@ -8,7 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.7.0
-	github.com/ssst0n3/awesome_libs latest
-	github.com/ssst0n3/lightweight_db latest
+	github.com/ssst0n3/awesome_libs v0.5.9
+	github.com/ssst0n3/lightweight_db v0.7.7
 	github.com/stretchr/testify v1.6.1
 )
