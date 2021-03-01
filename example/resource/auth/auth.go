@@ -7,7 +7,6 @@ import (
 	"github.com/ssst0n3/lightweight_api/example/resource/user"
 	"github.com/ssst0n3/lightweight_api/middleware"
 	"net/http"
-	"time"
 )
 
 var Resource = lightweight_api.Resource{
@@ -44,7 +43,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := middleware.GenerateToken(userWithId.Id, userWithId.IsAdmin, 3*time.Hour)
+	token, err := middleware.GenerateToken(userWithId.Id, userWithId.IsAdmin, DurationToken)
 	if err != nil {
 		lightweight_api.HandleInternalServerError(c, err)
 		return
