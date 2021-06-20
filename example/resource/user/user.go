@@ -30,7 +30,7 @@ var Resource = lightweight_api.NewResource(ResourceName, model.SchemaUser.Table,
 // @ID list-user
 // @Accept json
 // @Produce json
-// @Success 200 {array} ListUserBody
+// @Success 200 {array} model.ListUserBody
 // @Router /api/v1/user [get]
 func List(c *gin.Context) {
 	var users []model.ListUserBody
