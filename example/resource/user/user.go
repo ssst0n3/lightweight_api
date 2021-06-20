@@ -74,7 +74,7 @@ func Create(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "User ID"
-// @Param user_update_basic_body body UpdateBasicBody true "Update user's basic information"
+// @Param user_update_basic_body body model.UpdateBasicBody true "Update user's basic information"
 // @Success 200 {model} response.UpdateSuccess200
 // @Router /api/v1/user/{id}/basic [put]
 func UpdateBasic(c *gin.Context) {
@@ -89,7 +89,7 @@ func UpdateBasic(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "User ID"
-// @Param user_update_password_body body UpdatePasswordBody true "Update user's password"
+// @Param user_update_password_body body model.UpdatePasswordBody true "Update user's password"
 // @Success 200 {model} response.UpdateSuccess200
 // @Router /api/v1/user/{id}/password [put]
 func UpdatePassword(c *gin.Context) {
