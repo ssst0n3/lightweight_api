@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/cipher"
 	"github.com/ssst0n3/lightweight_api"
 	"github.com/ssst0n3/lightweight_api/example/resource/user"
 	"github.com/ssst0n3/lightweight_api/example/resource/user/model"
 	"github.com/ssst0n3/lightweight_api/example/resource/user/test"
 	"github.com/ssst0n3/lightweight_api/middleware"
+	"github.com/ssst0n3/lightweight_api/test/test_config"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
@@ -17,6 +19,8 @@ import (
 )
 
 func init() {
+	test_config.Init()
+	awesome_error.CheckFatal(lightweight_api.InitGormDB())
 	cipher.Init()
 	middleware.InitJwtKey()
 }

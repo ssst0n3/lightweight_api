@@ -6,7 +6,10 @@ import (
 )
 
 func init() {
-	if !test_config.IsTestLightweightApi() {
-		awesome_error.CheckFatal(InitGormDB())
-	}
+	Init()
+}
+
+func Init() {
+	test_config.Init()
+	awesome_error.CheckFatal(InitGormDB())
 }

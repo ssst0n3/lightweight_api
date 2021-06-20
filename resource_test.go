@@ -3,7 +3,6 @@ package lightweight_api
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs"
 	"github.com/ssst0n3/awesome_libs/awesome_reflect"
@@ -83,7 +82,6 @@ func TestResource_CreateResourceNew(t *testing.T) {
 	awesome_reflect.MustNotPointer(challenge.Model)
 	modelPtr := awesome_reflect.EmptyPointerOfModel(challenge.Model)
 	assert.NoError(t, json.Unmarshal([]byte(`{"name":"name"}`), modelPtr))
-	spew.Dump(modelPtr)
 }
 
 func TestResource_CreateResource(t *testing.T) {
