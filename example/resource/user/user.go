@@ -2,9 +2,9 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ssst0n3/awesome_libs"
 	"github.com/ssst0n3/awesome_libs/cipher"
 	"github.com/ssst0n3/lightweight_api"
+	"github.com/ssst0n3/lightweight_api/example/resource/user/model"
 	_ "github.com/ssst0n3/lightweight_api/response" // for swaggo
 	"net/http"
 )
@@ -17,11 +17,11 @@ const (
 //	Name:             ResourceName,
 //	TableName:        ResourceName,
 //	BaseRelativePath: lightweight_api.BaseRelativePathV1(ResourceName),
-//	Model:            Model{},
+//	User:            User{},
 //	GuidFieldJsonTag: "username",
 //}
 
-var Resource = lightweight_api.NewResource(ResourceName, Model{}, ColumnNameUsername)
+var Resource = lightweight_api.NewResource(ResourceName, model.SchemaUser.Table, model.User{}, model.ColumnNameUsername)
 
 // List godoc
 // @Summary list user
@@ -33,15 +33,18 @@ var Resource = lightweight_api.NewResource(ResourceName, Model{}, ColumnNameUser
 // @Success 200 {array} ListUserBody
 // @Router /api/v1/user [get]
 func List(c *gin.Context) {
-	query := awesome_libs.Format("SELECT id, {.username}, {.is_admin}", awesome_libs.Dict{
-		"username": ColumnNameUsername,
-		"is_admin": ColumnNameIsAdmin,
-	})
-	if objects, err := lightweight_api.Conn.ListObjects(query); err != nil {
+	var users []model.ListUserBody
+	err := lightweight_api.DB.Select(
+		model.SchemaUser.FieldsByName["ID"].DBName,
+		model.SchemaUser.FieldsByName["Username"].DBName,
+		model.SchemaUser.FieldsByName["IsAdmin"].DBName,
+	).Table(Resource.TableName).Find(&users).Error
+
+	if err != nil {
 		lightweight_api.HandleInternalServerError(c, err)
 		return
 	} else {
-		c.JSON(http.StatusOK, objects)
+		c.JSON(http.StatusOK, users)
 	}
 }
 
@@ -56,8 +59,9 @@ func List(c *gin.Context) {
 // @Router /api/v1/user [post]
 func Create(c *gin.Context) {
 	Resource.CreateResourceTemplate(c, func(modelPtr interface{}) (err error) {
-		u := modelPtr.(*Model)
-		u.Password, err = cipher.CommonCipher.Encrypt([]byte(u.Password))
+		u := modelPtr.(*model.User)
+		//u.Password, err = cipher.CommonCipher.Encrypt([]byte(u.Password))
+		err = EncryptUser(u)
 		return
 	}, nil)
 }
@@ -74,7 +78,7 @@ func Create(c *gin.Context) {
 // @Success 200 {model} response.UpdateSuccess200
 // @Router /api/v1/user/{id}/basic [put]
 func UpdateBasic(c *gin.Context) {
-	Resource.UpdateResourceTemplate(c, UpdateBasicBody{}, nil)
+	Resource.UpdateResourceTemplate(c, model.UpdateBasicBody{}, nil)
 }
 
 // UpdatePassword godoc
@@ -89,8 +93,8 @@ func UpdateBasic(c *gin.Context) {
 // @Success 200 {model} response.UpdateSuccess200
 // @Router /api/v1/user/{id}/password [put]
 func UpdatePassword(c *gin.Context) {
-	Resource.UpdateResourceTemplate(c, UpdatePasswordBody{}, func(modelPtr interface{}) (err error) {
-		u := modelPtr.(*Model)
+	Resource.UpdateResourceTemplate(c, model.UpdatePasswordBody{}, func(modelPtr interface{}) (err error) {
+		u := modelPtr.(*model.User)
 		u.Password, err = cipher.CommonCipher.Encrypt([]byte(u.Password))
 		return
 	})

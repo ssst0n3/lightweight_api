@@ -1,7 +1,6 @@
 package lightweight_api
 
 const (
-	EnvDriverName = "DB_DRIVER_NAME"
 	HintDriverNameNotRecognized = "lightweight_api did not recognize the environment variable DB_DRIVER_NAME: %s you provide, please set Connector by yourself"
 )
 

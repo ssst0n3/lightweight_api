@@ -2,8 +2,10 @@ package lightweight_api
 
 import (
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs/awesome_reflect"
+	"github.com/ssst0n3/lightweight_api/db"
 	"github.com/ssst0n3/lightweight_api/response"
 	"net/http"
 	"reflect"
@@ -17,10 +19,10 @@ type Resource struct {
 	GuidFieldJsonTag string
 }
 
-func NewResource(resourceName string, model interface{}, guidFiledJsonTag string) Resource {
+func NewResource(resourceName string, tableName string, model interface{}, guidFiledJsonTag string) Resource {
 	return Resource{
 		Name:             resourceName,
-		TableName:        resourceName,
+		TableName:        tableName,
 		BaseRelativePath: BaseRelativePathV1(resourceName),
 		Model:            model,
 		GuidFieldJsonTag: guidFiledJsonTag,
@@ -36,24 +38,20 @@ func BaseRelativePathV1(resourceName string) string {
 }
 
 func (r *Resource) ListResource(c *gin.Context) {
-	objects, err := Conn.ListAllPropertiesByTableName(r.TableName)
-	if err != nil {
-		HandleInternalServerError(c, err)
-		return
-	}
+	var objects []map[string]interface{}
+	DB.Table(r.TableName).Find(&objects)
 	c.JSON(http.StatusOK, objects)
 }
 
 func (r *Resource) MapResourceById(c *gin.Context) {
-	objects, err := Conn.MapAllPropertiesByTableName(r.TableName)
-	if err != nil {
-		HandleInternalServerError(c, err)
-		return
-	}
+	var list []map[string]interface{}
+	spew.Dump(r.TableName)
+	DB.Table(r.TableName).Find(&list)
+	objects := db.MapObjectById(list)
 	c.JSON(http.StatusOK, objects)
 }
 
-func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject func(modelPtr interface{}) error, taskAfterCreateObject func(id int64) error) {
+func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject func(modelPtr interface{}) error, taskAfterCreateObject func(id uint) error) {
 	awesome_reflect.MustNotPointer(r.Model)
 	modelPtr := awesome_reflect.EmptyPointerOfModel(r.Model)
 	if err := c.ShouldBindJSON(modelPtr); err != nil {
@@ -71,11 +69,10 @@ func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject
 			return
 		}
 	}
-	id, err := Conn.CreateObject(r.TableName, modelPtr)
-	if err != nil {
-		HandleInternalServerError(c, err)
-		return
-	}
+
+	DB.Create(modelPtr)
+	id := awesome_reflect.ValueByPtr(modelPtr).FieldByName("ID").Interface().(uint)
+
 	if taskAfterCreateObject != nil {
 		if err := taskAfterCreateObject(id); err != nil {
 			HandleInternalServerError(c, err)
@@ -90,7 +87,7 @@ func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject
 		msg = fmt.Sprintf(MsgResourceCreateSuccess, r.Name, id)
 	}
 	if !c.IsAborted() {
-		response.CreateSuccess200(c, uint(id), msg)
+		response.CreateSuccess200(c, id, msg)
 	}
 }
 
@@ -99,16 +96,22 @@ func (r *Resource) CreateResource(c *gin.Context) {
 }
 
 func (r *Resource) DeleteResource(c *gin.Context) {
+	r.DeleteResourceTemplate(c, false)
+}
+
+func (r *Resource) DeleteResourceTemplate(c *gin.Context, softDelete bool) {
 	id, err := r.MustResourceExistsByIdAutoParseParam(c)
 	if err != nil {
 		return
 	}
 
-	if err := Conn.DeleteObjectById(r.TableName, id); err != nil {
-		HandleInternalServerError(c, err)
+	model := awesome_reflect.EmptyPointerOfModel(r.Model)
+	if softDelete {
+		DB.Delete(model, id) // soft delete
 	} else {
-		response.DeleteSuccess200(c)
+		DB.Unscoped().Delete(model, id)
 	}
+	response.DeleteSuccess200(c)
 }
 
 func (r *Resource) UpdateResourceTemplate(c *gin.Context, model interface{}, taskBeforeCreateObject func(modelPtr interface{}) error) {
@@ -128,7 +131,7 @@ func (r *Resource) UpdateResourceTemplate(c *gin.Context, model interface{}, tas
 	}
 
 	if len(r.GuidFieldJsonTag) > 0 {
-		if err := r.MustResourceNotExistsExceptSelfByModelPtrWithGuid(c, modelPtr, r.GuidFieldJsonTag, id); err != nil {
+		if err := r.MustResourceNotExistsExceptSelfByModelPtrWithGuid(c, modelPtr, r.GuidFieldJsonTag, uint(id)); err != nil {
 			HandleInternalServerError(c, err)
 			return
 		}
@@ -139,13 +142,23 @@ func (r *Resource) UpdateResourceTemplate(c *gin.Context, model interface{}, tas
 			return
 		}
 	}
-	if err := Conn.UpdateObject(id, r.TableName, modelPtr); err != nil {
+
+	awesome_reflect.ValueByPtr(modelPtr).FieldByName("ID").SetUint(uint64(id))
+	result := DB.Save(modelPtr)
+	if result.Error != nil {
 		HandleInternalServerError(c, err)
 		return
 	} else {
 		response.UpdateSuccess200(c)
 		return
 	}
+	//if err := Conn.UpdateObject(id, r.TableName, modelPtr); err != nil {
+	//	HandleInternalServerError(c, err)
+	//	return
+	//} else {
+	//	response.UpdateSuccess200(c)
+	//	return
+	//}
 }
 
 func (r *Resource) UpdateResource(c *gin.Context) {
@@ -157,10 +170,13 @@ func (r *Resource) ShowResource(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	result, err := Conn.OrmShowObjectByIdUsingReflectRet(r.TableName, id, r.Model)
-	if err != nil {
+	//result, err := Conn.OrmShowObjectByIdUsingReflectRet(r.TableName, id, r.User)
+
+	model := awesome_reflect.EmptyPointerOfModel(r.Model)
+	result := DB.Table(r.TableName).First(model, id)
+	if result.Error != nil {
 		HandleInternalServerError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, model)
 }

@@ -1,6 +1,8 @@
 package kv_config
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 func InitRouter(router *gin.Engine) {
 	group := router.Group(Resource.BaseRelativePath)

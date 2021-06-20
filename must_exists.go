@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"reflect"
 )
 
 func (r Resource) MustResourceExistsGetModelByIdAutoParseParam(c *gin.Context) (id int64, model interface{}, err error) {
@@ -11,11 +12,15 @@ func (r Resource) MustResourceExistsGetModelByIdAutoParseParam(c *gin.Context) (
 	if err != nil {
 		return
 	}
-	model, err = Conn.OrmShowObjectByIdUsingReflectRet(r.TableName, id, r.Model)
-	if err != nil {
-		HandleInternalServerError(c, err)
-		return
-	}
+	//model, err = Conn.OrmShowObjectByIdUsingReflectRet(r.TableName, id, r.User)
+	//if err != nil {
+	//	HandleInternalServerError(c, err)
+	//	return
+	//}
+	//m := awesome_reflect.EmptyPointerOfModel(r.User)
+	m := reflect.New(reflect.TypeOf(r.Model))
+	DB.Table(r.TableName).First(m.Interface(), id)
+	model = m.Elem().Interface()
 	return
 }
 
@@ -33,24 +38,17 @@ func (r *Resource) MustResourceExistsByIdAutoParseParam(c *gin.Context) (int64, 
 	return id, nil
 }
 
-func (r *Resource) MustResourceExistsById(c *gin.Context, id int64) error {
-	if exists, err := r.CheckResourceExistsById(id); err != nil {
-		HandleInternalServerError(c, err)
-	} else {
-		if !exists {
-			err := errors.New(fmt.Sprintf(ResourceMustExists, r.Name))
-			HandleStatusBadRequestError(c, err)
-			return err
-		}
+func (r *Resource) MustResourceExistsById(c *gin.Context, id uint) error {
+	if !r.CheckResourceExistsById(id) {
+		err := errors.New(fmt.Sprintf(ResourceMustExists, r.Name))
+		HandleStatusBadRequestError(c, err)
+		return err
 	}
 	return nil
 }
 
 func (r *Resource) MustResourceExistsByGuid(c *gin.Context, guidColName string, guidValue interface{}) error {
-	if exists, err := r.CheckResourceExistsByGuid(guidColName, guidValue); err != nil {
-		HandleInternalServerError(c, err)
-		return err
-	} else if !exists {
+	if !r.CheckResourceExistsByGuid(guidColName, guidValue) {
 		err := errors.New(fmt.Sprintf(ResourceMustExists, r.Name))
 		HandleStatusBadRequestError(c, err)
 		return err
@@ -59,10 +57,7 @@ func (r *Resource) MustResourceExistsByGuid(c *gin.Context, guidColName string, 
 }
 
 func (r *Resource) MustResourceNotExistsByGuid(c *gin.Context, guidColName string, guidValue interface{}) error {
-	if exists, err := r.CheckResourceExistsByGuid(guidColName, guidValue); err != nil {
-		HandleInternalServerError(c, err)
-		return err
-	} else if exists {
+	if r.CheckResourceExistsByGuid(guidColName, guidValue) {
 		//err := errors.New(fmt.Sprintf(ResourceAlreadyExists, r.Name, guidColName, guidValue))
 		err := errors.New(fmt.Sprintf(GuidFieldMustNotExists, guidColName))
 		HandleStatusBadRequestError(c, err)
@@ -72,12 +67,7 @@ func (r *Resource) MustResourceNotExistsByGuid(c *gin.Context, guidColName strin
 }
 
 func (r *Resource) MustResourceNotExistsByModelPtrWithGuid(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string) error {
-	exists, err := r.CheckResourceExistsByModelPtrWithGuid(modelPtr, GuidFieldJsonTag)
-	if err != nil {
-		HandleInternalServerError(c, err)
-		return err
-	}
-	if exists {
+	if r.CheckResourceExistsByModelPtrWithGuid(modelPtr, GuidFieldJsonTag) {
 		err := errors.New(fmt.Sprintf(GuidFieldMustNotExists, GuidFieldJsonTag))
 		HandleStatusBadRequestError(c, err)
 		return err
@@ -85,11 +75,8 @@ func (r *Resource) MustResourceNotExistsByModelPtrWithGuid(c *gin.Context, model
 	return nil
 }
 
-func (r *Resource) MustResourceNotExistsExceptSelfByGuid(c *gin.Context, guidColName string, guidValue interface{}, id int64) error {
-	if exists, err := r.CheckResourceExistsExceptSelfByGuid(guidColName, guidValue, id); err != nil {
-		HandleInternalServerError(c, err)
-		return err
-	} else if exists {
+func (r *Resource) MustResourceNotExistsExceptSelfByGuid(c *gin.Context, guidColName string, guidValue interface{}, id uint) error {
+	if r.CheckResourceExistsExceptSelfByGuid(guidColName, guidValue, id) {
 		err := errors.New(fmt.Sprintf(ResourceMustNotExistsExceptSelf, r.Name))
 		HandleStatusBadRequestError(c, err)
 		return err
@@ -97,11 +84,8 @@ func (r *Resource) MustResourceNotExistsExceptSelfByGuid(c *gin.Context, guidCol
 	return nil
 }
 
-func (r *Resource) MustResourceNotExistsExceptSelfByModelPtrWithGuid(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, id int64) error {
-	if exists, err := r.CheckResourceExistsExceptSelfByModelPtrWithGuid(modelPtr, GuidFieldJsonTag, id); err != nil {
-		HandleInternalServerError(c, err)
-		return err
-	} else if exists {
+func (r *Resource) MustResourceNotExistsExceptSelfByModelPtrWithGuid(c *gin.Context, modelPtr interface{}, GuidFieldJsonTag string, id uint) error {
+	if r.CheckResourceExistsExceptSelfByModelPtrWithGuid(modelPtr, GuidFieldJsonTag, id) {
 		err := errors.New(fmt.Sprintf(ResourceMustNotExistsExceptSelf, r.Name))
 		HandleStatusBadRequestError(c, err)
 		return err

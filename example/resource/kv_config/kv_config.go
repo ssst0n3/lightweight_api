@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/lightweight_api"
+	"github.com/ssst0n3/lightweight_api/example/resource/kv_config/model"
 	"github.com/ssst0n3/lightweight_api/response"
-	"github.com/ssst0n3/lightweight_db"
 	"net/http"
 )
 
@@ -17,19 +17,21 @@ var Resource = lightweight_api.Resource{
 	Name:             ResourceName,
 	TableName:        ResourceName,
 	BaseRelativePath: lightweight_api.BaseRelativePathV1(ResourceName),
-	Model:            lightweight_db.Config{},
-	GuidFieldJsonTag: lightweight_db.ColumnNameConfigKey,
+	Model:            model.Config{},
+	GuidFieldJsonTag: model.SchemaConfig.FieldsByName["Key"].DBName,
 }
 
 func Key(c *gin.Context) (key string, err error) {
 	key = c.Param("key")
-	err = Resource.MustResourceExistsByGuid(c, lightweight_db.ColumnNameConfigKey, key)
+	err = Resource.MustResourceExistsByGuid(c, model.SchemaConfig.FieldsByName["Key"].DBName, key)
 	return
 }
 
 func GetValueByKey(key string) (value string, err error) {
-	value, err = lightweight_api.Conn.KVGetValueByKey(Resource.TableName, lightweight_db.ColumnNameConfigValue, lightweight_db.ColumnNameConfigKey, key)
+	var config model.Config
+	err = lightweight_api.DB.Where(&model.Config{Key: key}).First(&config).Error
 	awesome_error.CheckErr(err)
+	value = config.Value
 	return
 }
 
@@ -52,7 +54,9 @@ func Delete(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	if err := lightweight_api.Conn.DeleteObjectByGuid(Resource.TableName, lightweight_db.ColumnNameConfigKey, key); err != nil {
+
+	err = lightweight_api.DB.Unscoped().Delete(&model.Config{Key: key}).Error
+	if err != nil {
 		lightweight_api.HandleInternalServerError(c, err)
 		return
 	}
@@ -64,18 +68,13 @@ func Update(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	var model lightweight_db.Config
-	if err := c.ShouldBindJSON(&model); err != nil {
+	var m model.Config
+	if err := c.ShouldBindJSON(&m); err != nil {
 		lightweight_api.HandleStatusBadRequestError(c, err)
 		return
 	}
-	if err := lightweight_api.Conn.UpdateObjectSingleColumnByGuid(
-		lightweight_db.ColumnNameConfigKey,
-		key,
-		lightweight_db.TableNameConfig,
-		lightweight_db.ColumnNameConfigValue,
-		model.Value,
-	); err != nil {
+	err = lightweight_api.DB.Model(&model.Config{Key: key}).Save(&model.Config{Key: key, Value: m.Value}).Error
+	if err != nil {
 		lightweight_api.HandleInternalServerError(c, err)
 		return
 	} else {

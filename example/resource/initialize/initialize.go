@@ -2,11 +2,13 @@ package initialize
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/cipher"
 	"github.com/ssst0n3/lightweight_api"
+	"github.com/ssst0n3/lightweight_api/example/resource/kv_config/model"
 	"github.com/ssst0n3/lightweight_api/example/resource/user"
-	"github.com/ssst0n3/lightweight_db"
 	"net/http"
+	"strconv"
 )
 
 const (
@@ -22,12 +24,32 @@ var (
 	ShouldInitialize bool
 )
 
+func CheckShouldInitialize() (shouldInitialize bool, err error) {
+	//value, err := .KVGetValueByKey(
+	//	TableNameConfig, ColumnNameConfigValue, ColumnNameConfigKey, "is_initialized",
+	//)
+	config := model.Config{Key: "is_initialized"}
+	err = lightweight_api.DB.First(&config).Error
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	if isInitialized, err := strconv.ParseBool(config.Value); err != nil {
+		awesome_error.CheckDebug(err)
+		shouldInitialize = true
+		err = nil
+	} else {
+		shouldInitialize = !isInitialized
+	}
+	return
+}
+
 func Should(c *gin.Context) {
 	if !FlagUseKVConfig {
 		ShouldInitialize = cipher.IsInitKey
 	} else {
 		var err error
-		ShouldInitialize, err = lightweight_api.Conn.ShouldInitialize()
+		ShouldInitialize, err = CheckShouldInitialize()
 		if err != nil {
 			lightweight_api.HandleInternalServerError(c, err)
 			return
@@ -53,13 +75,9 @@ func End(c *gin.Context) {
 		ShouldInitialize = cipher.IsInitKey
 	} else {
 		ShouldInitialize = false
-		if err := lightweight_api.Conn.UpdateObjectSingleColumnByGuid(
-			lightweight_db.ColumnNameConfigKey,
-			"is_initialized",
-			lightweight_db.TableNameConfig,
-			lightweight_db.ColumnNameConfigValue,
-			"false",
-		); err != nil {
+		// update to true or false?
+		err := lightweight_api.DB.FirstOrCreate(&model.Config{Key: "is_initialized", Value: "true"}).Error
+		if err != nil {
 			lightweight_api.HandleInternalServerError(c, err)
 			return
 		}
