@@ -73,7 +73,7 @@ func Update(c *gin.Context) {
 		lightweight_api.HandleStatusBadRequestError(c, err)
 		return
 	}
-	err = lightweight_api.DB.Model(&model.Config{Key: key}).Save(&model.Config{Key: key, Value: m.Value}).Error
+	err = lightweight_api.DB.Model(&model.Config{Key: key}).Updates(&model.Config{Key: key, Value: m.Value}).Error
 	if err != nil {
 		lightweight_api.HandleInternalServerError(c, err)
 		return

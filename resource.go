@@ -144,7 +144,7 @@ func (r *Resource) UpdateResourceTemplate(c *gin.Context, model interface{}, tas
 	}
 
 	awesome_reflect.ValueByPtr(modelPtr).FieldByName("ID").SetUint(uint64(id))
-	result := DB.Save(modelPtr)
+	result := DB.Updates(modelPtr)
 	if result.Error != nil {
 		HandleInternalServerError(c, err)
 		return
