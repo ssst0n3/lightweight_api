@@ -46,7 +46,6 @@ func GetDsnFromEnvNormal() (dsn string) {
 func InitGormDB() (err error) {
 	driverName := os.Getenv(EnvDriverName)
 	dsn := GetDsnFromEnvNormal()
-	log.Logger.Info("dsn:", dsn)
 	switch driverName {
 	case "mysql":
 		DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
