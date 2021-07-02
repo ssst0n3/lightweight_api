@@ -66,6 +66,36 @@ func Create(c *gin.Context) {
 	}, nil)
 }
 
+// AnonymousCreate godoc
+// @Summary create user without authentication if table user is empty
+// @Description Add a user
+// @Tags User
+// @ID create-user
+// @Accept json
+// @Produce json
+// @Success 200 {model} response.CreateSuccess
+// @Router /api/v1/user/init [post]
+func AnonymousCreate(c *gin.Context) {
+	// check exists
+	var count int64
+	err := lightweight_api.DB.Model(&model.User{}).Count(&count).Error
+	if err != nil {
+		lightweight_api.HandleInternalServerError(c, err)
+		return
+	}
+	if count == 0 {
+		Resource.CreateResourceTemplate(c, func(modelPtr interface{}) (err error) {
+			u := modelPtr.(*model.User)
+			//u.Password, err = cipher.CommonCipher.Encrypt([]byte(u.Password))
+			err = EncryptUser(u)
+			return
+		}, nil)
+	} else {
+		c.Status(http.StatusForbidden)
+		return
+	}
+}
+
 // UpdateBasic godoc
 // @Summary update basic
 // @Description update some basic information of user
