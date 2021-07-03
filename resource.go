@@ -170,7 +170,6 @@ func (r *Resource) ShowResource(c *gin.Context) {
 	if err != nil {
 		return
 	}
-	//result, err := Conn.OrmShowObjectByIdUsingReflectRet(r.TableName, id, r.User)
 
 	model := awesome_reflect.EmptyPointerOfModel(r.Model)
 	result := DB.Table(r.TableName).First(model, id)
