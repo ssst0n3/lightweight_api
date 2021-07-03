@@ -2,8 +2,10 @@ package lightweight_api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/ssst0n3/lightweight_api/test/model"
 	"github.com/ssst0n3/lightweight_api/test/test_data"
 	"github.com/stretchr/testify/assert"
+	"strconv"
 	"testing"
 )
 
@@ -17,7 +19,8 @@ func WrapperTestResourceCheckResourceExists(t *testing.T, executor func(id uint)
 		assert.NoError(t, test_data.InitEmptyChallenge(DB))
 		DB.Create(&test_data.Challenge1)
 		exists := executor(test_data.Challenge1.ID)
-		assert.Equal(t, true, exists)
+		assert.True(t, true, exists)
+		assert.False(t, executor(2))
 	})
 }
 
@@ -43,33 +46,46 @@ func WrapperTestResourceCheckResourceExistsExceptSelf(t *testing.T, executor fun
 }
 
 func TestResource_CheckResourceExistsByIdAutoParseParam(t *testing.T) {
-	c := &gin.Context{Params: []gin.Param{
-		{Key: "id", Value: "1"},
-	}}
 	WrapperTestResourceCheckResourceExists(t, func(i uint) bool {
+		c := &gin.Context{Params: []gin.Param{
+			{Key: "id", Value: strconv.Itoa(int(i))},
+		}}
 		exists, id, err := challenge.CheckResourceExistsByIdAutoParseParam(c)
 		assert.NoError(t, err)
-		assert.Equal(t, int64(1), id)
+		assert.Equal(t, int64(i), id)
 		return exists
 	})
 }
 
 func TestResource_CheckResourceExistsById(t *testing.T) {
-	id := uint(1)
-	WrapperTestResourceCheckResourceExists(t, func(i uint) bool {
-		return challenge.CheckResourceExistsById(id)
+	WrapperTestResourceCheckResourceExists(t, func(id uint) bool {
+		exists, err := challenge.CheckResourceExistsById(id)
+		assert.NoError(t, err)
+		return exists
 	})
 }
 
 func TestResource_CheckResourceExistsByGuid(t *testing.T) {
 	WrapperTestResourceCheckResourceExists(t, func(i uint) bool {
-		return challenge.CheckResourceExistsByGuid(challenge.GuidFieldJsonTag, test_data.Challenge1.Name)
+		var name string
+		if i == 1 {
+			name = test_data.Challenge1.Name
+		} else if i == 2 {
+			name = "not_exists"
+		}
+		return challenge.CheckResourceExistsByGuid(challenge.GuidFieldJsonTag, name)
 	})
 }
 
 func TestResource_CheckResourceExistsByModelPtrWithGuid(t *testing.T) {
 	WrapperTestResourceCheckResourceExists(t, func(i uint) bool {
-		return challenge.CheckResourceExistsByModelPtrWithGuid(&test_data.Challenge1, challenge.GuidFieldJsonTag)
+		var c model.Challenge
+		if i == 1 {
+			c = test_data.Challenge1
+		} else if i == 2 {
+			c = test_data.Challenge2
+		}
+		return challenge.CheckResourceExistsByModelPtrWithGuid(&c, challenge.GuidFieldJsonTag)
 	})
 }
 

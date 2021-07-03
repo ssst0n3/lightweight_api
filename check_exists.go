@@ -16,17 +16,20 @@ func (r *Resource) CheckResourceExistsByIdAutoParseParam(c *gin.Context) (bool, 
 		awesome_error.CheckErr(err)
 		return false, id, err
 	}
-	exists := r.CheckResourceExistsById(uint(id))
+	exists, err := r.CheckResourceExistsById(uint(id))
 	return exists, id, err
 }
 
-func (r Resource) CheckResourceExistsById(id uint) bool {
+func (r Resource) CheckResourceExistsById(id uint) (exists bool, err error) {
 	var count int64
-	// this will count soft delete
-	//DB.Table(r.TableName).Where(map[string]interface{}{"id": id}).Count(&count)
 	model := awesome_reflect.EmptyPointerOfModel(r.Model)
-	DB.Model(model).Count(&count)
-	return count > 0
+	err = DB.Find(model, id).Count(&count).Error
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	exists = count > 0
+	return
 }
 
 func (r *Resource) CheckResourceExistsByGuid(guidColName string, guidValue interface{}) bool {

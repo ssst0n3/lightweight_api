@@ -26,6 +26,12 @@ var (
 		Score:  20,
 		Solved: true,
 	}
+	Challenge2 = model.Challenge{
+		Model: gorm.Model{
+			ID: 2,
+		},
+		Name: "challenge2",
+	}
 	Challenges = []model.Challenge{
 		Challenge1,
 	}

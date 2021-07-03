@@ -39,7 +39,12 @@ func (r *Resource) MustResourceExistsByIdAutoParseParam(c *gin.Context) (int64, 
 }
 
 func (r *Resource) MustResourceExistsById(c *gin.Context, id uint) error {
-	if !r.CheckResourceExistsById(id) {
+	exists, err := r.CheckResourceExistsById(id)
+	if err != nil {
+		HandleStatusBadRequestError(c, err)
+		return err
+	}
+	if !exists {
 		err := errors.New(fmt.Sprintf(ResourceMustExists, r.Name))
 		HandleStatusBadRequestError(c, err)
 		return err
