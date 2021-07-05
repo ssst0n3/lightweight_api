@@ -9,11 +9,13 @@ var UserAdmin = model.User{
 	Model: gorm.Model{
 		ID: 1,
 	},
-	UpdateBasicBody: model.UpdateBasicBody{
-		Username: "admin",
-		IsAdmin:  true,
-	},
-	UpdatePasswordBody: model.UpdatePasswordBody{
-		Password: "admin",
+	CreateUserBody: model.CreateUserBody{
+		UpdateBasicBody: model.UpdateBasicBody{
+			Username: "admin",
+			IsAdmin:  true,
+		},
+		UpdatePasswordBody: model.UpdatePasswordBody{
+			Password: "admin",
+		},
 	},
 }

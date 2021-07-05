@@ -35,11 +35,13 @@ func TestLogin(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 		u := model.User{
-			UpdateBasicBody: model.UpdateBasicBody{
-				Username: test.UserAdmin.Username,
-			},
-			UpdatePasswordBody: model.UpdatePasswordBody{
-				Password: passwordPlain,
+			CreateUserBody: model.CreateUserBody{
+				UpdateBasicBody: model.UpdateBasicBody{
+					Username: test.UserAdmin.Username,
+				},
+				UpdatePasswordBody: model.UpdatePasswordBody{
+					Password: passwordPlain,
+				},
 			},
 		}
 		marshal, err := json.Marshal(u)
@@ -53,11 +55,13 @@ func TestLogin(t *testing.T) {
 		w := httptest.NewRecorder()
 		c, _ := gin.CreateTestContext(w)
 		u := model.User{
-			UpdateBasicBody: model.UpdateBasicBody{
-				Username: test.UserAdmin.Username,
-			},
-			UpdatePasswordBody: model.UpdatePasswordBody{
-				Password: "wrong",
+			CreateUserBody: model.CreateUserBody{
+				UpdateBasicBody: model.UpdateBasicBody{
+					Username: test.UserAdmin.Username,
+				},
+				UpdatePasswordBody: model.UpdatePasswordBody{
+					Password: "wrong",
+				},
 			},
 		}
 		marshal, err := json.Marshal(u)

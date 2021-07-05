@@ -19,16 +19,15 @@ type UpdatePasswordBody struct {
 	Password string `json:"password"`
 }
 
-type User struct {
-	gorm.Model
+type CreateUserBody struct {
 	UpdateBasicBody
 	UpdatePasswordBody
 }
 
-const (
-	ColumnNameUsername = "username"
-	ColumnNameIsAdmin  = "is_admin"
-)
+type User struct {
+	gorm.Model
+	CreateUserBody
+}
 
 var SchemaUser schema.Schema
 

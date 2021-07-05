@@ -24,8 +24,10 @@ func Login(c *gin.Context) {
 
 	var user model.User
 	err := lightweight_api.DB.Where(&model.User{
-		UpdateBasicBody: model.UpdateBasicBody{
-			Username: u.Username,
+		CreateUserBody: model.CreateUserBody{
+			UpdateBasicBody: model.UpdateBasicBody{
+				Username: u.Username,
+			},
 		},
 	}).Find(&user).Error
 

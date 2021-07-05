@@ -21,7 +21,7 @@ const (
 //	GuidFieldJsonTag: "username",
 //}
 
-var Resource = lightweight_api.NewResource(ResourceName, model.SchemaUser.Table, model.User{}, model.ColumnNameUsername)
+var Resource = lightweight_api.NewResource(ResourceName, model.SchemaUser.Table, model.User{}, model.SchemaUser.FieldsByName["Username"].DBName)
 
 // List godoc
 // @Summary list user
@@ -55,7 +55,7 @@ func List(c *gin.Context) {
 // @ID create-user
 // @Accept json
 // @Produce json
-// @Param user body model.User true "Create User"
+// @Param user body model.CreateUserBody true "Create User"
 // @Success 200 {model} response.CreateSuccess
 // @Router /api/v1/user [post]
 func Create(c *gin.Context) {
@@ -74,7 +74,7 @@ func Create(c *gin.Context) {
 // @ID create-user
 // @Accept json
 // @Produce json
-// @Param user body model.User true "Create User"
+// @Param user body model.CreateUserBody true "Create User"
 // @Success 200 {model} response.CreateSuccess
 // @Router /api/v1/user/init [post]
 func AnonymousCreate(c *gin.Context) {
