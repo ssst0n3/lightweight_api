@@ -55,6 +55,7 @@ func List(c *gin.Context) {
 // @ID create-user
 // @Accept json
 // @Produce json
+// @Param user body model.User true "Create User"
 // @Success 200 {model} response.CreateSuccess
 // @Router /api/v1/user [post]
 func Create(c *gin.Context) {
@@ -73,6 +74,7 @@ func Create(c *gin.Context) {
 // @ID create-user
 // @Accept json
 // @Produce json
+// @Param user body model.User true "Create User"
 // @Success 200 {model} response.CreateSuccess
 // @Router /api/v1/user/init [post]
 func AnonymousCreate(c *gin.Context) {
