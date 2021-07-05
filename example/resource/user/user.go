@@ -56,7 +56,7 @@ func List(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param user body model.CreateUserBody true "Create User"
-// @Success 200 {model} response.CreateSuccess
+// @Success 200 {object} response.CreateSuccess
 // @Router /api/v1/user [post]
 func Create(c *gin.Context) {
 	Resource.CreateResourceTemplate(c, func(modelPtr interface{}) (err error) {
@@ -75,7 +75,7 @@ func Create(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param user body model.CreateUserBody true "Create User"
-// @Success 200 {model} response.CreateSuccess
+// @Success 200 {object} response.CreateSuccess
 // @Router /api/v1/user/init [post]
 func AnonymousCreate(c *gin.Context) {
 	// check exists
@@ -107,7 +107,7 @@ func AnonymousCreate(c *gin.Context) {
 // @Produce json
 // @Param id path int true "User ID"
 // @Param user_update_basic_body body model.UpdateBasicBody true "Update user's basic information"
-// @Success 200 {model} response.UpdateSuccess200
+// @Success 200 {object} response.UpdateSuccess200
 // @Router /api/v1/user/{id}/basic [put]
 func UpdateBasic(c *gin.Context) {
 	Resource.UpdateResourceTemplate(c, model.UpdateBasicBody{}, nil)
@@ -122,7 +122,7 @@ func UpdateBasic(c *gin.Context) {
 // @Produce json
 // @Param id path int true "User ID"
 // @Param user_update_password_body body model.UpdatePasswordBody true "Update user's password"
-// @Success 200 {model} response.UpdateSuccess200
+// @Success 200 {object} response.UpdateSuccess200
 // @Router /api/v1/user/{id}/password [put]
 func UpdatePassword(c *gin.Context) {
 	Resource.UpdateResourceTemplate(c, model.UpdatePasswordBody{}, func(modelPtr interface{}) (err error) {
