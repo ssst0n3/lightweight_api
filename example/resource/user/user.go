@@ -107,7 +107,7 @@ func AnonymousCreate(c *gin.Context) {
 // @Produce json
 // @Param id path int true "User ID"
 // @Param user_update_basic_body body model.UpdateBasicBody true "Update user's basic information"
-// @Success 200 {object} response.UpdateSuccess200
+// @Success 200 {object} response.Base
 // @Router /api/v1/user/{id}/basic [put]
 func UpdateBasic(c *gin.Context) {
 	Resource.UpdateResourceTemplate(c, model.UpdateBasicBody{}, nil)
@@ -122,7 +122,7 @@ func UpdateBasic(c *gin.Context) {
 // @Produce json
 // @Param id path int true "User ID"
 // @Param user_update_password_body body model.UpdatePasswordBody true "Update user's password"
-// @Success 200 {object} response.UpdateSuccess200
+// @Success 200 {object} response.Base
 // @Router /api/v1/user/{id}/password [put]
 func UpdatePassword(c *gin.Context) {
 	Resource.UpdateResourceTemplate(c, model.UpdatePasswordBody{}, func(modelPtr interface{}) (err error) {
