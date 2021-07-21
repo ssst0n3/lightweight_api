@@ -48,7 +48,7 @@ func JwtAdmin() gin.HandlerFunc {
 func JwtUser() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if !CloseJwt {
-			token, err := c.Cookie("token")
+			token, err := GetToken(c)
 			if err != nil {
 				response.Unauthorized401(c, "none token.")
 				return
