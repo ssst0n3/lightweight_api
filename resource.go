@@ -40,6 +40,9 @@ func BaseRelativePathV1(resourceName string) string {
 func (r *Resource) ListResource(c *gin.Context) {
 	var objects []map[string]interface{}
 	DB.Table(r.TableName).Find(&objects)
+	if objects == nil {
+		objects = []map[string]interface{}{}
+	}
 	c.JSON(http.StatusOK, objects)
 }
 

@@ -26,11 +26,22 @@ var challenge = Resource{
 }
 
 func TestResource_ListResource(t *testing.T) {
-	assert.NoError(t, test_data2.InitEmptyChallenge(DB))
-	DB.Create(&test_data2.Challenge1)
-	router := gin.Default()
-	router.GET(challenge.BaseRelativePath, challenge.ListResource)
-	challenge.TestResourceListResource(t, router)
+	t.Run("empty", func(t *testing.T) {
+		assert.NoError(t, test_data2.InitEmptyChallenge(DB))
+		router := gin.Default()
+		router.GET(challenge.BaseRelativePath, challenge.ListResource)
+		req, _ := http.NewRequest(http.MethodGet, challenge.BaseRelativePath, nil)
+		w := ObjectOperate(req, router)
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Contains(t, w.Body.String(), "[]")
+	})
+	t.Run("not empty", func(t *testing.T) {
+		assert.NoError(t, test_data2.InitEmptyChallenge(DB))
+		DB.Create(&test_data2.Challenge1)
+		router := gin.Default()
+		router.GET(challenge.BaseRelativePath, challenge.ListResource)
+		challenge.TestResourceListResource(t, router)
+	})
 }
 
 func TestResource_MapResourceById(t *testing.T) {
