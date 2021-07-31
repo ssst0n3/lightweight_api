@@ -13,11 +13,21 @@ var Resource = lightweight_api.Resource{
 	BaseRelativePath: lightweight_api.BaseRelativePathV1("auth"),
 }
 
+// Login godoc
+// @Summary Login
+// @Description
+// @Tags Auth
+// @ID auth-login
+// @Accept json
+// @Produce json
+// @Param user body model.LoginModel true "User"
+// @Success 200 {object} LoginSuccessResponse
+// @Router /api/v1/auth [post]
 func Login(c *gin.Context) {
-	var u model.User
+	var loginModel model.LoginModel
 	errWrong := errors.Errorf(wrongUsernameOrPassword)
 
-	if err := c.BindJSON(&u); err != nil {
+	if err := c.BindJSON(&loginModel); err != nil {
 		lightweight_api.HandleStatusBadRequestError(c, err)
 		return
 	}
@@ -26,7 +36,7 @@ func Login(c *gin.Context) {
 	err := lightweight_api.DB.Where(&model.User{
 		CreateUserBody: model.CreateUserBody{
 			UpdateBasicBody: model.UpdateBasicBody{
-				Username: u.Username,
+				Username: loginModel.Username,
 			},
 		},
 	}).Find(&user).Error
@@ -40,7 +50,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	check, err := middleware.CheckPassword(u.Password, user.Password)
+	check, err := middleware.CheckPassword(loginModel.Password, user.Password)
 	if err != nil {
 		lightweight_api.HandleInternalServerError(c, err)
 		return
@@ -55,10 +65,10 @@ func Login(c *gin.Context) {
 		lightweight_api.HandleInternalServerError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"token":    token,
-		"username": user.Username,
-		"is_admin": user.IsAdmin,
-		"user_id":  user.ID,
+	c.JSON(http.StatusOK, LoginSuccessResponse{
+		Token:    token,
+		Username: user.Username,
+		IsAdmin:  user.IsAdmin,
+		UserId:   user.ID,
 	})
 }
