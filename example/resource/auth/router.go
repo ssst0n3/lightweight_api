@@ -10,6 +10,6 @@ func InitRouter(router *gin.Engine) {
 	admin := router.Group(Resource.BaseRelativePath, middleware.JwtAdmin())
 	{
 		anonymous.POST("", Login)
-		admin.GET("", func(context *gin.Context) {})
+		admin.GET("", Nothing)
 	}
 }

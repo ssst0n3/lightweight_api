@@ -13,6 +13,18 @@ var Resource = lightweight_api.Resource{
 	BaseRelativePath: lightweight_api.BaseRelativePathV1("auth"),
 }
 
+// Nothing godoc
+// @Summary Nothing
+// @Description Just for check permission, only user with admin permission will get 200, otherwise will get 401. 只有管理员可以获得200,普通用户会401;
+// @Tags Auth
+// @ID auth-nothing
+// @Accept json
+// @Produce json
+// @Success 200
+// @Failure 401
+// @Router /api/v1/auth [get]
+func Nothing(c *gin.Context) {}
+
 // Login godoc
 // @Summary Login
 // @Description
