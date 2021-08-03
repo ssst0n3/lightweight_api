@@ -15,7 +15,7 @@ var Resource = lightweight_api.Resource{
 
 // Nothing godoc
 // @Summary Nothing
-// @Description Just for check permission, only user with admin permission will get 200, otherwise will get 401. 只有管理员可以获得200,普通用户会401;
+// @Description Just for check permission, only user with admin permission will get 200, otherwise will get 401; 只有管理员可以获得200,普通用户会401.
 // @Tags Auth
 // @ID auth-nothing
 // @Accept json
