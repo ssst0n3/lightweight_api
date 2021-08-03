@@ -73,7 +73,7 @@ func Create(c *gin.Context) {
 // @Summary create user without authentication if table user is empty
 // @Description Add a user
 // @Tags User
-// @ID create-user
+// @ID anonymous-create-user
 // @Accept json
 // @Produce json
 // @Param user body model.CreateUserBody true "Create User"
