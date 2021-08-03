@@ -30,6 +30,7 @@ var Resource = lightweight_api.NewResource(ResourceName, model.SchemaUser.Table,
 // @ID list-user
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Success 200 {array} model.ListUserBody
 // @Router /api/v1/user [get]
 func List(c *gin.Context) {
@@ -55,6 +56,7 @@ func List(c *gin.Context) {
 // @ID create-user
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param user body model.CreateUserBody true "Create User"
 // @Success 200 {object} response.CreateSuccess
 // @Router /api/v1/user [post]
@@ -100,11 +102,12 @@ func AnonymousCreate(c *gin.Context) {
 
 // UpdateBasic godoc
 // @Summary update basic
-// @Description update some basic information of user
+// @Description updates some basic information of user
 // @Tags User
 // @ID update-basic
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param id path int true "User ID"
 // @Param user_update_basic_body body model.UpdateBasicBody true "Update user's basic information"
 // @Success 200 {object} response.Base
@@ -120,6 +123,7 @@ func UpdateBasic(c *gin.Context) {
 // @ID update-password
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param id path int true "User ID"
 // @Param user_update_password_body body model.UpdatePasswordBody true "Update user's password"
 // @Success 200 {object} response.Base
