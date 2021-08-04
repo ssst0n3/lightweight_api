@@ -20,6 +20,7 @@ var Resource = lightweight_api.Resource{
 // @ID auth-nothing
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Success 200
 // @Failure 401
 // @Router /api/v1/auth [get]
