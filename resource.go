@@ -2,7 +2,6 @@ package lightweight_api
 
 import (
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs/awesome_reflect"
 	"github.com/ssst0n3/lightweight_api/db"
@@ -20,6 +19,7 @@ type Resource struct {
 }
 
 func NewResource(resourceName string, tableName string, model interface{}, guidFiledJsonTag string) Resource {
+	awesome_reflect.MustNotPointer(model)
 	return Resource{
 		Name:             resourceName,
 		TableName:        tableName,
@@ -39,7 +39,8 @@ func BaseRelativePathV1(resourceName string) string {
 
 func (r *Resource) ListResource(c *gin.Context) {
 	var objects []map[string]interface{}
-	DB.Table(r.TableName).Find(&objects)
+	model := awesome_reflect.EmptyPointerOfModel(r.Model)
+	DB.Model(model).Find(&objects)
 	if objects == nil {
 		objects = []map[string]interface{}{}
 	}
@@ -48,8 +49,8 @@ func (r *Resource) ListResource(c *gin.Context) {
 
 func (r *Resource) MapResourceById(c *gin.Context) {
 	var list []map[string]interface{}
-	spew.Dump(r.TableName)
-	DB.Table(r.TableName).Find(&list)
+	model := awesome_reflect.EmptyPointerOfModel(r.Model)
+	DB.Model(model).Find(&list)
 	objects := db.MapObjectById(list)
 	c.JSON(http.StatusOK, objects)
 }
