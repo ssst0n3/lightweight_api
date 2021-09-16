@@ -8,6 +8,7 @@ import (
 	"github.com/ssst0n3/lightweight_api/response"
 	"net/http"
 	"reflect"
+	"strconv"
 )
 
 type Resource struct {
@@ -35,6 +36,13 @@ func BaseRelativePath(apiVersion, resourceName string) string {
 
 func BaseRelativePathV1(resourceName string) string {
 	return BaseRelativePath("v1", resourceName)
+}
+
+func (r *Resource) CountResource(c *gin.Context) {
+	var count int64
+	model := awesome_reflect.EmptyPointerOfModel(r.Model)
+	DB.Model(model).Count(&count)
+	c.String(http.StatusOK, strconv.Itoa(int(count)))
 }
 
 func (r *Resource) ListResource(c *gin.Context) {
