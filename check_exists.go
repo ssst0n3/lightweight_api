@@ -32,10 +32,15 @@ func (r Resource) CheckResourceExistsById(id uint) (exists bool, err error) {
 	return
 }
 
-func (r *Resource) CheckResourceExistsByGuid(guidColName string, guidValue interface{}) bool {
+func (r *Resource) CheckResourceExistsByGuid(guidColName string, guidValue interface{}) (exists bool) {
 	var count int64
-	DB.Table(r.TableName).Where(map[string]interface{}{guidColName: guidValue}).Count(&count)
-	return count > 0
+	err := DB.Table(r.TableName).Where(map[string]interface{}{guidColName: guidValue}).Count(&count).Error
+	if err != nil {
+		awesome_error.CheckErr(err)
+		return
+	}
+	exists = count > 0
+	return
 }
 
 func (r *Resource) CheckResourceExistsByModelPtrWithGuid(modelPtr interface{}, GuidFieldJsonTag string) bool {
