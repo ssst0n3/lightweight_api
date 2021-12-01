@@ -26,7 +26,7 @@ func TestList(t *testing.T) {
 	assert.NoError(t, test.InitEmptyUser(lightweight_api.DB))
 	w := httptest.NewRecorder()
 	c, _ := gin.CreateTestContext(w)
-	lightweight_api.DB.Create(&test.UserAdmin)
+	assert.NoError(t, lightweight_api.DB.Create(&test.UserAdmin).Error)
 	List(c)
 	log.Logger.Info(w.Body.String())
 	var users []model.User
