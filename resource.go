@@ -48,7 +48,7 @@ func (r *Resource) CountResource(c *gin.Context) {
 func (r *Resource) ListResource(c *gin.Context) {
 	var objects []map[string]interface{}
 	model := awesome_reflect.EmptyPointerOfModel(r.Model)
-	DB.Model(model).Find(&objects)
+	DB.Table(r.TableName).Model(model).Find(&objects)
 	if objects == nil {
 		objects = []map[string]interface{}{}
 	}
