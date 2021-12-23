@@ -46,13 +46,10 @@ func (r *Resource) CountResource(c *gin.Context) {
 }
 
 func (r *Resource) ListResource(c *gin.Context) {
-	var objects []map[string]interface{}
 	model := awesome_reflect.EmptyPointerOfModel(r.Model)
-	DB.Table(r.TableName).Model(model).Find(&objects)
-	if objects == nil {
-		objects = []map[string]interface{}{}
-	}
-	c.JSON(http.StatusOK, objects)
+	sliceModel := awesome_reflect.EmptyPointerOfSliceModel(r.Model)
+	DB.Table(r.TableName).Model(model).Find(sliceModel)
+	c.JSON(http.StatusOK, sliceModel)
 }
 
 func (r *Resource) MapResourceById(c *gin.Context) {
