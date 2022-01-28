@@ -64,7 +64,7 @@ func Should(c *gin.Context) {
 }
 
 func CreateUser(c *gin.Context) {
-	if cipher.IsInitKey {
+	if ShouldInitialize || cipher.IsInitKey {
 		user.Create(c)
 	} else {
 		c.JSON(http.StatusOK, gin.H{
