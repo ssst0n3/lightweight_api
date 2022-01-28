@@ -1,12 +1,14 @@
 package initialize
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/cipher"
 	"github.com/ssst0n3/lightweight_api"
 	"github.com/ssst0n3/lightweight_api/example/resource/kv_config/model"
 	"github.com/ssst0n3/lightweight_api/example/resource/user"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 )
@@ -31,6 +33,9 @@ func CheckShouldInitialize() (shouldInitialize bool, err error) {
 	config := model.Config{Key: "is_initialized"}
 	err = lightweight_api.DB.First(&config).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return true, nil
+		}
 		awesome_error.CheckErr(err)
 		return
 	}
