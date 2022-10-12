@@ -20,7 +20,7 @@ func (r *Resource) CheckResourceExistsByIdAutoParseParam(c *gin.Context) (bool, 
 	return exists, id, err
 }
 
-func (r Resource) CheckResourceExistsById(id uint) (exists bool, err error) {
+func (r *Resource) CheckResourceExistsById(id uint) (exists bool, err error) {
 	var count int64
 	model := awesome_reflect.EmptyPointerOfModel(r.Model)
 	err = DB.Find(model, id).Count(&count).Error

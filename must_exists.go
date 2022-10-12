@@ -7,7 +7,7 @@ import (
 	"reflect"
 )
 
-func (r Resource) MustResourceExistsGetModelByIdAutoParseParam(c *gin.Context) (id int64, model interface{}, err error) {
+func (r *Resource) MustResourceExistsGetModelByIdAutoParseParam(c *gin.Context) (id int64, model interface{}, err error) {
 	id, err = r.MustResourceExistsByIdAutoParseParam(c)
 	if err != nil {
 		return
