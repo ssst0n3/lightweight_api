@@ -6,10 +6,8 @@ import (
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/log"
 	"gorm.io/driver/mysql"
-	//"gorm.io/driver/sqlite"
-	"github.com/cloudquery/sqlite"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"io/ioutil"
 	"os"
 )
 
@@ -33,7 +31,7 @@ func GetDsnFromEnvNormal() (dsn string) {
 		dbPort := os.Getenv(EnvDbPort)
 		dbUser := os.Getenv(EnvDbUser)
 		dbPasswordFile := os.Getenv(EnvDbPasswordFile)
-		password, err := ioutil.ReadFile(dbPasswordFile)
+		password, err := os.ReadFile(dbPasswordFile)
 		if err != nil {
 			panic(err)
 		}
