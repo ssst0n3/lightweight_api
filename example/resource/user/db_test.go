@@ -26,5 +26,5 @@ func TestGetUserByJwt(t *testing.T) {
 	assert.NoError(t, err)
 	user, err := GetUserByJwt(c)
 	assert.NoError(t, err)
-	assert.Equal(t, test.UserAdmin, user)
+	assert.Equal(t, test.UserAdmin.CreateUserBody, user.CreateUserBody)
 }
