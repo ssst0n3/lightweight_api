@@ -6,8 +6,10 @@ import (
 	"github.com/ssst0n3/awesome_libs/awesome_error"
 	"github.com/ssst0n3/awesome_libs/log"
 	"gorm.io/driver/mysql"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	//"gorm.io/gorm/sqlite"
+	//"github.com/cloudquery/sqlite"
+	"github.com/glebarez/sqlite"
 	"os"
 )
 
