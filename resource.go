@@ -79,7 +79,10 @@ func (r *Resource) CreateResourceTemplate(c *gin.Context, taskBeforeCreateObject
 		}
 	}
 
-	DB.Create(modelPtr)
+	if err := DB.Create(modelPtr).Error; err != nil {
+		HandleInternalServerError(c, err)
+		return
+	}
 	id := awesome_reflect.ValueByPtr(modelPtr).FieldByName("ID").Interface().(uint)
 
 	if taskAfterCreateObject != nil {
